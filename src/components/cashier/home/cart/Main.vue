@@ -210,7 +210,7 @@
   </div>
 </template>
 <script>
-  import CreateCustomer from '../../CreateCustomer'
+  import CreateCustomer from '../../../CreateCustomer'
   export default {
     components: {
       CreateCustomer
@@ -258,7 +258,7 @@
       },
       checkOut() {
         var status = this.$refs.form.validate();
-        if (status&this.cartItems.length<1) {
+        if (status) {
           this.$emit('close')
           this.$store.commit('SET_LOADING', true);
             var form = {
@@ -275,21 +275,21 @@
                 console.log(response)
                 this.clearOrder();
                 this.defaulData();
+                this.resetValidation();
                 //Update Item's quantity
                 this.$store.dispatch('getProducts')
-                this.snackbar('success', 'Order Successfuly Purchased');
+                this.snackbar('success', 'Order Successfully Purchased');
               })
               .catch(error => {
                 this.$store.commit('SET_LOADING', false);
                 console.log(error)
                 this.snackbar('error', 'Something went wrong');
               })
-        } else {
-          if (this.cartItems.length<1) {
-            this.snackbar('error', 'You must add a product');
-          }
         }
       },
+      resetValidation () {
+            this.$refs.form.resetValidation()
+        },
       clearOrder() {
           this.$store.commit('CLEAR_PRODUCTS');
       },

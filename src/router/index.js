@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Order from '../views/Order.vue'
+import Account from '../views/Accounts.vue'
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,15 @@ const routes = [
     component: Order,
     meta: {
       requiresAuth: true,
+    }
+  },
+  {
+    path: '/accounts',
+    name: 'Accounts',
+    component: Account,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
     }
   }
 ]

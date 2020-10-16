@@ -19,6 +19,32 @@ export function initialize(store, router, axios) {
          else {
             next();
         }
+
+        switch( to.meta.permission ){
+            case 'denied':
+             if( !token ){
+                next();
+              }else{
+                next('/dashboard');
+              }
+            break;
+
+            case 'CASHIER':
+             if( store.getters.currentUser.user_type == 'CASHIER' ){
+                next();
+              }else{
+                next('/dashboard');
+              }
+            break;
+
+            case 'STOREADMIN':
+              if( store.getters.currentUser.user_type == 'STOREADMIN' ){
+                next();
+              }else{
+                next('/dashboard');
+              }
+            break;
+        }
     })
 
 

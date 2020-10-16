@@ -3,9 +3,6 @@
     <div v-if="$vuetify.breakpoint.mobile">
       <FullScreen :dialog="dialog" @close="$emit('close')" />
     </div>
-    <!-- <div v-else>
-      <Dropdown :dialog="dialog" />
-    </div> -->
   </div>
 </template>
 

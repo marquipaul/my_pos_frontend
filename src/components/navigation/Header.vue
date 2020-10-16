@@ -2,14 +2,17 @@
     <v-app-bar
       app
     >
+    <v-app-bar-nav-icon 
+        v-if="currentUser.user_type === 'STOREADMIN'"
+        text
+        @click.stop="drawerOpen"
+      >
+      <v-icon>mdi-menu</v-icon>
+      </v-app-bar-nav-icon>
        <v-toolbar-title class="text-uppercase">{{ currentUser.store.name }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-
-        <!-- <v-btn to="/" text>
-            Home
-        </v-btn> -->
+      <v-toolbar-items v-if="currentUser.user_type === 'CASHIER'">
         <v-btn to="/dashboard" icon text>
             <v-icon>mdi-view-dashboard</v-icon>
         </v-btn>
@@ -38,11 +41,16 @@
             <v-icon>mdi-power</v-icon>
         </v-btn>
       </v-toolbar-items>
+      <v-toolbar-items v-else>
+        <v-btn @click="signout()" icon text>
+          <v-icon>mdi-power</v-icon>
+        </v-btn>
+      </v-toolbar-items>
         <Cart class="float-right" :dialog="dialog" @close="dialog = false" />
     </v-app-bar>
 </template>
 <script>
-import Cart from '../home/Cart'
+import Cart from '../cashier/home/Cart'
 import { mapGetters } from 'vuex'
 export default {
   components: {
@@ -77,6 +85,9 @@ export default {
         text: text,
         timeout: 4000
       });
+    },
+    drawerOpen() {
+      this.$store.commit('SET_SIDEBAR_MODEL', this.sidebarModel? false : true)
     }
   },
   watch: {
@@ -88,7 +99,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: 'currentUser'
+      currentUser: 'currentUser',
+      sidebarModel: 'sidebarModel',
     }),
     cartItems() {
       return this.$store.getters['retrieveCartItems']

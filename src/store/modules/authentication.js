@@ -2,7 +2,7 @@
 import axios from 'axios'
 const state  = {
     token: localStorage.getItem('access_token') || null,
-    currentUser: localStorage.getItem('current_user') || {},
+    currentUser: localStorage.getItem('current_user') || null,
 };
 const getters = {
     loggedIn(state) {
@@ -10,7 +10,7 @@ const getters = {
         //return true
     },
     currentUser(state) {
-        return JSON.parse(state.currentUser)
+        return state.currentUser? JSON.parse(state.currentUser) : false
     },
 };
 const mutations = {

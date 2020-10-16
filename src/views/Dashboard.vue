@@ -1,37 +1,24 @@
 <template>
-  <div class="home">
-      <v-row>
-        <v-col :cols="$vuetify.breakpoint.mobile? '12' : showCart? '9' : '12'">
-          <Items />
-        </v-col>
-        <v-col v-if="!$vuetify.breakpoint.mobile&showCart" md="3" sm="12" xs="12">
-          <v-card>
-            <MainCart />
-          </v-card>
-        </v-col>
-      </v-row>
+  <div class="dashboard-main">
+      <DashboardCashier v-if="currentUser.user_type === 'CASHIER'"  />
+      <DashboardAdmin v-if="currentUser.user_type === 'STOREADMIN'" />
   </div>
 </template>
 
 <script>
-import Items from '../components/home/Items'
-import MainCart from '../components/home/cart/Main'
+import DashboardCashier from '../components/cashier/Dashboard'
+import DashboardAdmin from '../components/store-admin/Dashboard'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
-  data() {
-    return {
-      cart: true
-    }
-  },
   components: {
-    Items,
-    MainCart
+    DashboardCashier,
+    DashboardAdmin
   },
   computed: {
-    ...mapGetters({
-      showCart: 'showCart'
-    })
+      ...mapGetters({
+        currentUser: 'currentUser',
+      })
   }
 }
 </script>
