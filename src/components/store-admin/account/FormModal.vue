@@ -115,7 +115,7 @@ export default {
                     this.loading = false
                     console.log(res)
                     this.closeModal()
-                    this.snackbar('success', 'Account Successfully Created');
+                    this.snackbar('success', `${this.action == 'edit'? 'Account Successfully Updated' : 'Account Successfully Created'}`);
                 })
                 .catch(error => {
                     console.log(error)

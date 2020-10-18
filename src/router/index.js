@@ -4,6 +4,9 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Order from '../views/Order.vue'
 import Account from '../views/Accounts.vue'
+import Product from '../views/Product.vue'
+import ProductInbound from '../views/ProductInbound.vue'
+import ProductOutbound from '../views/ProductOutbound.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +36,33 @@ const routes = [
     path: '/accounts',
     name: 'Accounts',
     component: Account,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
+    }
+  },
+  {
+    path: '/products',
+    name: 'Product',
+    component: Product,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
+    }
+  },
+  {
+    path: '/product-inbounds',
+    name: 'Product-inbound',
+    component: ProductInbound,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
+    }
+  },
+  {
+    path: '/product-outbounds',
+    name: 'Product-outbounds',
+    component: ProductOutbound,
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN'

@@ -31,7 +31,7 @@
           <span>{{item.products.length}} Product(s)</span>
         </template>
         <template v-slot:item.created_at="{ item }">
-          <span>{{formatDate(item.created_at)}}</span>
+          {{moment(item.created_at).format('llll')}}
         </template>
         <template v-slot:item.action="{ item }">
           <v-btn @click="viewProducts(item)" icon text>
@@ -44,15 +44,18 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import moment from 'moment';
 import List from '../components/orders/Products'
 export default {
   components: { List },
     data () {
       return {
+        moment: moment,
         selectedOrder: {},
         dialog: false,
         pagination: {},
         headers: [
+          { text: 'Order Code', value: 'order_code' },
           {
             text: 'Customer',
             align: 'start',
@@ -83,28 +86,6 @@ export default {
       },
     },
     methods: {
-      formatDate(date) {
-        var todate=new Date(date).getDate();
-        var tomonth=new Date(date).getMonth()+1;
-        var toyear=new Date(date).getFullYear();
-
-        let unix_timestamp = new Date(date).getTime();
-        // Create a new JavaScript Date object based on the timestamp
-        // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-        var dateTime = new Date(unix_timestamp * 1000);
-        // Hours part from the timestamp
-        var hours = dateTime.getHours();
-        // Minutes part from the timestamp
-        var minutes = "0" + dateTime.getMinutes();
-        // Seconds part from the timestamp
-        var seconds = "0" + dateTime.getSeconds();
-
-        // Will display time in 10:30:23 format
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-        var original_date=tomonth+'/'+todate+'/'+toyear+' '+formattedTime;
-        return original_date;
-      },
       viewProducts(item) {
         this.dialog = true;
         this.selectedOrder = item;

@@ -200,8 +200,9 @@
                     v-model="change_amount"
                 ></v-text-field>
             </v-list-item>
+            <p v-if="changeStatus" class="px-2 text-center caption red--text">Paid Amount must be equal or higher than the total amount</p>
             <v-list-item>
-                <v-btn :disabled="this.cartItems.length<1" :loading="loadingCart" block @click="checkOut()">
+                <v-btn :disabled="verifyCart()" :loading="loadingCart" block @click="checkOut()">
                     Check Out ₱{{totalAmount}}
                 </v-btn>
             </v-list-item>
@@ -227,13 +228,27 @@
         },
         customer_id: undefined,
         loading: false,
-        loadingCart: false
+        loadingCart: false,
+        changeStatus: false
       }
     },
     mounted() {
       this.getDataFromAPI();
     },
     methods: {
+      verifyCart() {
+        this.changeStatus = this.paid_amount < this.totalAmount;
+        var cartStatus = this.cartItems.length<1;
+        if (!cartStatus&!this.changeStatus) {
+          if (cartStatus!=this.changeStatus) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          return true
+        }
+      },
       getDataFromAPI() {
         this.loading = true
         this.$store.dispatch('getCustomers')

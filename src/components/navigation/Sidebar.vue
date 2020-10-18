@@ -53,7 +53,9 @@ export default {
             navigations: [
                 {name: 'Dashboard', icon: 'mdi-view-dashboard', route: 'dashboard'},
                 {name: 'Accounts', icon: 'mdi-account-multiple', route: 'accounts'},
-                {name: 'Products', icon: 'mdi-view-list', route: 'products'},
+                {name: 'Products', icon: 'mdi-clipboard-check', route: 'products'},
+                {name: 'Product Inbound', icon: 'mdi-inbox-arrow-down', route: 'product-inbounds'},
+                {name: 'Product Outbound', icon: 'mdi-inbox-arrow-up', route: 'product-outbounds'},
                 {name: 'Orders', icon: 'mdi-view-list', route: 'orders'},
                 {name: 'Analytics', icon: 'mdi-trending-up', route: 'analytics'},
                 {name: 'Settings', icon: 'mdi-cog', route: 'settings'},

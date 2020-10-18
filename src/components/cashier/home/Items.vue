@@ -14,7 +14,7 @@
         </v-col>
       </v-row>
         <v-row v-for="(item, category_index) in getProducts" :key="category_index">
-          <v-col cols="12" class="title">{{item.category}}
+          <v-col v-if="item.products.length > 0" cols="12" class="title">{{item.category}}
             <v-divider></v-divider>
           </v-col>
           <v-col
@@ -152,7 +152,7 @@ export default {
         price: price,
         amount: amount,
       }
-      this.$store.dispatch('addProduct', product);
+      this.$store.dispatch('addProductToCart', product);
     },
     filteredProducts(index) {
       var query = this.search? this.search : '';

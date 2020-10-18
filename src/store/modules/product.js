@@ -1,38 +1,123 @@
 /* eslint-disable */
 import axios from 'axios'
+import Vue from 'vue'
 const state  = {
-    items: [],
+    products: {},
+    productInfo: {},
+    product_selection: []
 };
 const getters = {
-    getProducts(state) {
-        return state.items
+    getAdminProducts(state) {
+        return state.products
+    },
+    getProductSelection(state) {
+        return state.product_selection
+    },
+    getProductInfo(state) {
+        return state.productInfo
     }
 };
 const mutations = {
-    SET_PRODUCTS(state, payload){
-        state.items = payload
+    SET_ADMIN_PRODUCTS(state, payload){
+        state.products = payload
     },
-    UPDATE_PRODUCT(state, payload){
-        state.items[payload.category_index].products[payload.product_index] = payload.item;
+    SET_PRODUCT_SELECTION(state, payload) {
+        state.product_selection = payload;
     },
+    SET_PRODUCT_INFO(state, payload){
+        state.productInfo = payload
+    },
+    PUSH_PRODUCT(state, payload){
+        state.products.data.push(payload)
+    },
+    UPDATE_ADMIN_PRODUCT(state, payload) {
+        let updateIndex = state.products.data.findIndex(item => item.id === payload.id);
+        Vue.set(state.products.data, updateIndex, payload)
+    },
+    DELETE_PRODUCT(state, id) {
+        let deleteIndex = state.products.data.findIndex(item => item.id === id);
+        state.products.data.splice(deleteIndex, 1)
+    }
 };
 const actions = {
-    getProducts(context){
+    getAdminProducts(context, params){
         return new Promise((resolve, reject) => {
-            context.commit('SET_LOADING', true);
-            axios.get('/api/products?cashier')
+            axios.get('/api/products', { params: params })
             .then(response => {
                 console.log(response.data)
-                context.commit('SET_PRODUCTS', response.data)
+                context.commit('SET_ADMIN_PRODUCTS', response.data)
                 resolve(response)
-                context.commit('SET_LOADING', false);
             })
             .catch(error => {
                 reject(error)
-                context.commit('SET_LOADING', false);
             })
         })
     },
+    getProductSelection(context, params){
+        return new Promise((resolve, reject) => {
+            axios.get('/api/products?selection')
+            .then(response => {
+                console.log(response.data)
+                context.commit('SET_PRODUCT_SELECTION', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+    getProduct(context, id){
+        return new Promise((resolve, reject) => {
+            axios.get(`/api/products/${id}`)
+            .then(response => {
+                context.commit('SET_PRODUCT_INFO', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+    addProduct(context, payload){
+        return new Promise((resolve, reject) => {
+            axios.post('/api/products', payload)
+            .then(response => {
+                console.log(response.data)
+                context.commit('PUSH_PRODUCT', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+    updateProduct(context, payload){
+        return new Promise((resolve, reject) => {
+            axios.put(`/api/products/${payload.id}`, payload)
+            .then(response => {
+                console.log(response.data)
+                context.commit('UPDATE_ADMIN_PRODUCT', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+    deleteProduct(context, id){
+        return new Promise((resolve, reject) => {
+            axios.delete(`/api/products/${id}`)
+            .then(response => {
+                console.log(response.data)
+                context.commit('DELETE_PRODUCT', id)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+
 };
 
 

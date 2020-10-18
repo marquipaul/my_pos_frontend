@@ -5,10 +5,14 @@ Vue.use(Vuex)
 
 import auth from './modules/authentication';
 import cart from './modules/cart';
+import productCashier from './modules/product-cashier';
 import product from './modules/product';
 import customer from './modules/customer';
 import order from './modules/order';
 import account from './modules/account';
+import category from './modules/category';
+import productInbound from './modules/product-inbound';
+import productOutbound from './modules/product-outbound';
 
 export default new Vuex.Store({
   state: {
@@ -56,9 +60,13 @@ export default new Vuex.Store({
   modules: {
     auth,
     cart,
+    productCashier,
     product,
     customer,
     order,
-    account
+    account,
+    category,
+    productInbound,
+    productOutbound
   }
 })

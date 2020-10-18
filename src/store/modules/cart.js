@@ -50,7 +50,7 @@ const mutations = {
     }
 };
 const actions = {
-    addProduct(context, payload){
+    addProductToCart(context, payload){
         console.log(context.state.items.some(el => el.product_id === payload.product_id), payload, context.state.items)
         if (context.state.items.some(el => el.product_id === payload.product_id)) {
             context.dispatch('addQuantity', payload)
