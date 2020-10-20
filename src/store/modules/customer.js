@@ -17,9 +17,9 @@ const mutations = {
     }
 };
 const actions = {
-    getCustomers(context){
+    getCustomers(context, params){
         return new Promise((resolve, reject) => {
-            axios.get('/api/customers?cashier')
+            axios.get('/api/customers', { params: params })
             .then(response => {
                 console.log(response.data)
                 context.commit('SET_CUSTOMERS', response.data)

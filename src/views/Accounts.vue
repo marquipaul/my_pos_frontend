@@ -1,6 +1,6 @@
 <template>
     <div>
-        Accounts
+      <p class="grey--text text--darken-1">Accounts</p>  
         <v-card>
             <v-card-title>
                 <v-btn class="primary" @click="action({ action: 'add' })">

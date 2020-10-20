@@ -21,9 +21,9 @@
                     <v-list-item-content>
                         <v-text-field
                             :rules="[$validate.rules.required, $validate.rules.mobileNumber]"
-                            v-model="form.mobile_mobile"
+                            v-model="form.mobile_number"
                             label="Mobile No."
-                            placeholder="ex. 9123456789"
+                            placeholder="ex. 09123456789"
                         ></v-text-field>
                     </v-list-item-content>
                 </v-list-item>

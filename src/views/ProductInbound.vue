@@ -1,6 +1,6 @@
 <template>
     <div>
-        Product Inbounds
+        <p class="grey--text text--darken-1">Product Inbounds</p> 
         <v-card>
             <v-card-title>
                 <v-btn class="primary" @click="action({ action: 'add' })">

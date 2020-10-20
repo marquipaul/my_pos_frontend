@@ -211,6 +211,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
   import CreateCustomer from '../../../CreateCustomer'
   export default {
     components: {
@@ -251,9 +252,11 @@
       },
       getDataFromAPI() {
         this.loading = true
-        this.$store.dispatch('getCustomers')
+        var params = {
+          cashier: true
+        }
+        this.$store.dispatch('getCustomers', params)
           .then(res => {
-            console.log(res)
             this.loading = false
           })
           .catch(error => {
@@ -262,7 +265,6 @@
           })
       },
       setCustomerID(evt) {
-        console.log(evt)
         this.customer_id = evt;
       },
       addQuantity(item) {
@@ -283,11 +285,9 @@
               payment_status: this.form.payment_status,
               products: this.cartItems
             }
-            console.log(form);
             this.$store.dispatch('placeOrder', form)
               .then(response => {
                 this.$store.commit('SET_LOADING', false);
-                console.log(response)
                 this.clearOrder();
                 this.defaulData();
                 this.resetValidation();
@@ -320,11 +320,9 @@
       checkValidQuantity(item) {
         if (item.price_type === 'RETAIL') {
           var status = item.current_quantity === item.quantity;
-          console.log(status)
         } else {
           //var current_quantity = item.current_quantity
           status =  item.current_quantity < item.quantity+item.minimum_wholesale_order;
-          console.log(status)
         }
         return status;
         

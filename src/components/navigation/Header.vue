@@ -1,5 +1,9 @@
 <template>
     <v-app-bar
+      color="primary"
+      dark
+      dense 
+      clipped-left 
       app
     >
     <v-app-bar-nav-icon 

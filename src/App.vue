@@ -41,3 +41,31 @@ export default {
     }
 };
 </script>
+<style>
+    /* width */
+    ::-webkit-scrollbar {
+        width:10px;
+        padding-left:10px;
+    }
+    /* Track */
+    ::-webkit-scrollbar-track {
+        display: none;
+        
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #757575;
+        border-radius: 50px;
+        display: block;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #616161;
+        display: block;
+    }
+  .v-card {
+    border-radius: 14px !important;
+  }
+</style>

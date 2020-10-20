@@ -1,9 +1,12 @@
 <template>
     <v-navigation-drawer
       :value="model"
-      :temporary="$vuetify.breakpoint.mobil"
+      :temporary="$vuetify.breakpoint.mobile"
       app
       @input="inputModel"
+      overflow
+      fixed
+      clipped
     >
 
       <v-list class="mt-n1">
@@ -56,9 +59,10 @@ export default {
                 {name: 'Products', icon: 'mdi-clipboard-check', route: 'products'},
                 {name: 'Product Inbound', icon: 'mdi-inbox-arrow-down', route: 'product-inbounds'},
                 {name: 'Product Outbound', icon: 'mdi-inbox-arrow-up', route: 'product-outbounds'},
+                {name: 'Expenses', icon: 'mdi-cash-usd', route: 'expenses'},
                 {name: 'Orders', icon: 'mdi-view-list', route: 'orders'},
                 {name: 'Analytics', icon: 'mdi-trending-up', route: 'analytics'},
-                {name: 'Settings', icon: 'mdi-cog', route: 'settings'},
+                //{name: 'Settings', icon: 'mdi-cog', route: 'settings'},
             ],
         }
     },

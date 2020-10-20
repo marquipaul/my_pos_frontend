@@ -13,6 +13,8 @@ import account from './modules/account';
 import category from './modules/category';
 import productInbound from './modules/product-inbound';
 import productOutbound from './modules/product-outbound';
+import expenses from './modules/expenses';
+import dashboard from './modules/dashboard';
 
 export default new Vuex.Store({
   state: {
@@ -67,6 +69,8 @@ export default new Vuex.Store({
     account,
     category,
     productInbound,
-    productOutbound
+    productOutbound,
+    expenses,
+    dashboard
   }
 })

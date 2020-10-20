@@ -57,7 +57,7 @@
                               </span>
                               <v-radio-group
                                   v-model="product.price_type"
-                                  
+                                  @change="checkValidQuantity(product)"
                                   row
                                 >
                                   <v-radio
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 export default {
   name: 'items',
@@ -123,7 +124,6 @@ export default {
       this.loading = true;
       this.$store.dispatch('getProducts')
         .then(res => {
-          console.log(res)
           this.loading = false;
         })
         .catch(error => {
@@ -132,16 +132,13 @@ export default {
         })
     },
     updateProduct(item, product_index, category_index) {
-      console.log(item, product_index, category_index)
       //Update Product
       this.$store.commit('UPDATE_PRODUCT', {item, product_index, category_index})
-      console.log(this.getProducts)
     },
     addItem(item) {
       var price = item.price_type === 'RETAIL'? item.retail_price : item.wholesale_price;
       var quantity = item.price_type === 'RETAIL'? 1 : item.minimum_wholesale_order;
       var amount = price * quantity;
-      console.log(price, quantity, amount)
       var product = {
         product_id: item.id,
         description: item.description,
@@ -152,7 +149,22 @@ export default {
         price: price,
         amount: amount,
       }
+      if (product.quantity > product.current_quantity) {
+        this.snackbar('error', 'Low Product Quantity');
+      } else {
+        this.submitItem(product);
+      }
+    },
+    submitItem(product) {
       this.$store.dispatch('addProductToCart', product);
+    },
+    snackbar(color, text) {
+        this.$store.commit('SET_SNACKBAR', { 
+            open: true, 
+            color: color, 
+            text: text,
+            timeout: 4000
+        });
     },
     filteredProducts(index) {
       var query = this.search? this.search : '';
@@ -162,19 +174,18 @@ export default {
     },
     checkValidQuantity(product) {
       let index = this.getCartProducts.findIndex(item => item.product_id === product.id);
-
-      console.log('product', index, product)
+      
       if (index != -1) {
         var productItem = this.getCartProducts[index];
 
         if (productItem.price_type === 'RETAIL') {
           var status = productItem.current_quantity === productItem.quantity;
-          console.log('Valid',status)
         } else {
           //var current_quantity = item.current_quantity
           status =  productItem.current_quantity < productItem.quantity+productItem.minimum_wholesale_order;
-          console.log('Valid', status)
         }
+        //console.log('Wholesale Status', productItem.current_quantity < productItem.quantity+productItem.minimum_wholesale_order)
+        
         return status;
 
       } else {

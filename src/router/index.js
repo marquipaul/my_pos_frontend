@@ -7,6 +7,7 @@ import Account from '../views/Accounts.vue'
 import Product from '../views/Product.vue'
 import ProductInbound from '../views/ProductInbound.vue'
 import ProductOutbound from '../views/ProductOutbound.vue'
+import Expense from '../views/Expenses.vue'
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,15 @@ const routes = [
     path: '/product-outbounds',
     name: 'Product-outbounds',
     component: ProductOutbound,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
+    }
+  },
+  {
+    path: '/expenses',
+    name: 'Expenses',
+    component: Expense,
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN'
