@@ -32,8 +32,8 @@ Vue.prototype.$validate = {
 
 //axios.defaults.baseURL = 'http://product-pos.test'
 //axios.defaults.baseURL = 'http://44939e9bfd8a.ngrok.io/'
-axios.defaults.baseURL = `http://${window.location.hostname}:8000/`
-//axios.defaults.baseURL = 'http://09e7c9afd680.ngrok.io/'
+//axios.defaults.baseURL = `http://${window.location.hostname}:8000/`
+axios.defaults.baseURL = 'http://islanderposapp-env.eba-i4mn5qhg.ap-southeast-1.elasticbeanstalk.com/'
 
 initialize(store, router, axios);
 

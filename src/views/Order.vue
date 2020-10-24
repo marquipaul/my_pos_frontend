@@ -1,7 +1,8 @@
 <template>
     <div>
-      
+      <p class="grey--text text--darken-1">Orders</p>
         <v-data-table
+            :loading="loading"
             :headers="headers"
             :items="getOrders.data"
             :server-items-length="getOrders.total"
@@ -72,7 +73,8 @@ export default {
           { text: 'Action', value: 'action' },
         ],
         form: {},
-        first: true
+        first: true,
+        loading: false
       }
     },
     mounted() {
@@ -118,7 +120,7 @@ export default {
           })
       },
       getDataFromApi() {
-        this.$store.commit('SET_LOADING', true);
+        this.loading = true
         //const { sortBy, sortDesc, page, itemsPerPage } = this.pagination
 
           if (this.first) {
@@ -136,11 +138,11 @@ export default {
           }
         this.$store.dispatch('getOrders', params)
           .then(res => {
-            this.$store.commit('SET_LOADING', false);
+            this.loading = false
             console.log(res)
           })
           .catch(error => {
-            this.$store.commit('SET_LOADING', false);
+            this.loading = false
             console.log(error)
           })
       }

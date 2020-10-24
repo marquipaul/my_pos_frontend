@@ -1,6 +1,6 @@
 <template>
-        <v-card>
-            <v-card-title class="grey--text text--darken-2">
+        <v-card :loading="loading">
+            <v-card-title  class="grey--text text--darken-2">
                 Top {{ limit }} Customers
                 <v-spacer></v-spacer>
                 <v-row v-if="filter">
@@ -11,7 +11,7 @@
                     <v-text-field v-model="minimum" type="number" label="Minimum Amount"></v-text-field>
                   </v-col>
                   <v-col cols="12" xl="3" lg="3" md="12" sm="12" xs="12">
-                    <v-btn small :loading="loading" @click="getDataFromApi()" block color="success">Filter</v-btn>
+                    <v-btn small :loading="loading" @click="getDataFromAPI()" block color="success">Filter</v-btn>
                     <v-btn @click="filter = false" color="error" small block>Cancel</v-btn>
                   </v-col>
                 </v-row>
@@ -55,6 +55,8 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+    props: ['reload'],
+    
     data () {
       return {
         loading: false,
@@ -64,28 +66,18 @@ export default {
       }
     },
     mounted() {
-      this.getDataFromApi();
+      this.getDataFromAPI();
     },
     watch: {
-      // pagination: {
-      //   handler () {
-      //     this.getDataFromApi()
-      //   },
-      //   deep: true
-      // },
-      // search: _.debounce(
-      //   function() {
-      //       this.getDataFromApi();
-      //   },
-      //   800,
-      //   {
-      //       leading: true,
-      //       trailing: true
-      //   }
-      // ),
+      reload: {
+        handler() {
+          this.getDataFromAPI()
+        },
+        deep: true
+      }
     },
     methods: {
-      getDataFromApi() {
+      getDataFromAPI() {
         this.loading = true
 
           this.first = false

@@ -62,7 +62,7 @@ export default {
                 {name: 'Expenses', icon: 'mdi-cash-usd', route: 'expenses'},
                 {name: 'Orders', icon: 'mdi-view-list', route: 'orders'},
                 {name: 'Analytics', icon: 'mdi-trending-up', route: 'analytics'},
-                //{name: 'Settings', icon: 'mdi-cog', route: 'settings'},
+                {name: 'Reports', icon: 'mdi-clipboard-text', route: 'reports'},
             ],
         }
     },

@@ -8,6 +8,9 @@ import Product from '../views/Product.vue'
 import ProductInbound from '../views/ProductInbound.vue'
 import ProductOutbound from '../views/ProductOutbound.vue'
 import Expense from '../views/Expenses.vue'
+import Analytics from '../views/Analytics.vue'
+import Receipt from '../views/Receipt.vue'
+
 
 Vue.use(VueRouter)
 
@@ -77,6 +80,20 @@ const routes = [
       requiresAuth: true,
       permission: 'STOREADMIN'
     }
+  },
+  {
+    path: '/analytics',
+    name: 'Analytics',
+    component: Analytics,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN'
+    }
+  },
+  {
+    path: '/customer/receipt/:id/:code',
+    name: 'Receipt',
+    component: Receipt,
   }
 ]
 

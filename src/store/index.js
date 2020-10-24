@@ -15,6 +15,7 @@ import productInbound from './modules/product-inbound';
 import productOutbound from './modules/product-outbound';
 import expenses from './modules/expenses';
 import dashboard from './modules/dashboard';
+import analytic from './modules/analytic';
 
 export default new Vuex.Store({
   state: {
@@ -71,6 +72,7 @@ export default new Vuex.Store({
     productInbound,
     productOutbound,
     expenses,
-    dashboard
+    dashboard,
+    analytic
   }
 })

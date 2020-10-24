@@ -62,6 +62,17 @@ const actions = {
             })
         })
     },
+    getOrderReceipt(context, params){
+        return new Promise((resolve, reject) => {
+            axios.get(`/api/customer/reciept/${params.id}/${params.code}`)
+            .then(response => {
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
 };
 
 

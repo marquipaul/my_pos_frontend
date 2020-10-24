@@ -1,5 +1,5 @@
 <template>
-        <v-card>
+        <v-card :loading="loading">
             <v-card-title class="grey--text text--darken-2">
                 Low Stocks
                 <v-spacer></v-spacer>
@@ -13,7 +13,7 @@
             </v-card-title>
             <v-card-text>
                 <v-data-table
-                    :loading="loading"
+                    
                     :headers="headers"
                     :items="getAdminProducts.data"
                     :server-items-length="getAdminProducts.total"
@@ -52,6 +52,7 @@ import { mapGetters } from 'vuex'
 import _ from "lodash";
 import moment from 'moment';
 export default {
+  props: ['reload'],
     data () {
       return {
         moment: moment,
@@ -73,18 +74,24 @@ export default {
       }
     },
     mounted() {
-      this.getDataFromApi();
+      this.getDataFromAPI();
     },
     watch: {
+      reload: {
+          handler() {
+              this.getDataFromAPI()
+          },
+          deep: true
+      },
       pagination: {
         handler () {
-          this.getDataFromApi()
+          this.getDataFromAPI()
         },
         deep: true
       },
       search: _.debounce(
         function() {
-            this.getDataFromApi();
+            this.getDataFromAPI();
         },
         800,
         {
@@ -94,7 +101,7 @@ export default {
       ),
     },
     methods: {
-      getDataFromApi() {
+      getDataFromAPI() {
         this.loading = true
           if (this.first) {
             this.pagination.sortBy[0]='quantity'

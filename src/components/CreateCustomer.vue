@@ -60,6 +60,12 @@
                 </v-list-item-content>
             </v-list-item>
                 <v-list-item>
+                    <v-list-item-content class="text-center grey--text text--darken-1">
+                        <p class="caption">By submitting, you and the customer accept PMPIAS</p> 
+                        <a href="#" class="caption">Terms and Condition</a>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
                     <v-btn :loading="loading" block @click="submitCustomer">Save Customer</v-btn>
                 </v-list-item>
             </v-form>
