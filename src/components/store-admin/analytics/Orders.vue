@@ -1,19 +1,7 @@
 <template>
     <div>
-      <p class="grey--text text--darken-1">Orders</p>
-      <v-card>
-        <!-- <v-card-title>
-                Create new Order using a Cashier Account
-                <v-spacer></v-spacer>
-                <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-                ></v-text-field>
-            </v-card-title> -->
-      <v-card-text>
+      <p class="grey--text text--darken-1">List of Orders</p>
+
         <v-data-table
             :loading="loading"
             :headers="headers"
@@ -29,22 +17,6 @@
         <template v-slot:item.total_amount="{ item }">
           <span>₱{{item.total_amount}}</span>
         </template>
-        <template v-slot:item.order_status="{ item }">
-          <v-switch
-            :loading="item.id === form.id"
-            @change="orderStatus(item)"
-            inset
-            :input-value="item.order_status==='RECEIVED'? true : false"
-          ></v-switch>
-        </template>
-        <template v-slot:item.payment_status="{ item }">
-          <v-switch
-            :loading="item.id === form.id"
-            @change="paymentStatus(item)"
-            inset
-            :input-value="item.payment_status==='PAID'? true : false"
-          ></v-switch>
-        </template>
         <template v-slot:item.product_count="{ item }">
           <span>{{item.products.length}} Product(s)</span>
         </template>
@@ -57,8 +29,6 @@
           </v-btn>
         </template>
         </v-data-table>
-      </v-card-text>
-    </v-card>
         <List :dialog="dialog" :order="selectedOrder" @close="dialog=false" />
     </div>
 </template>
@@ -66,7 +36,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment';
 import _ from "lodash";
-import List from '../components/orders/Products'
+import List from './List'
 export default {
   components: { List },
     data () {
@@ -101,6 +71,12 @@ export default {
     //   this.getDataFromApi();
     // },
     watch: {
+      getParams: {
+        handler () {
+          this.getDataFromApi()
+        },
+        deep: true
+      },
       pagination: {
         handler () {
           this.getDataFromApi()
@@ -159,9 +135,12 @@ export default {
           }
 
           this.first = false
-          let params = {
-            search: this.search,
-            cashier: true,
+          let params = { //getParams
+            start_date: this.getParams.start_date,
+            end_date: this.getParams.end_date,
+            product_id: this.getParams.product_id,
+            category_id: this.getParams.category_id,
+            report: true,
             page: this.pagination.page,
             per_page: this.pagination.itemsPerPage,
             sort_by: this.pagination.sortBy[0],
@@ -180,7 +159,8 @@ export default {
     },
     computed: {
     ...mapGetters({
-      getOrders: 'getOrders'
+      getOrders: 'getOrders',
+      getParams: 'getAnalyticParams'
     })
   },
   }

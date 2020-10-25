@@ -62,12 +62,12 @@
                         </template>
                         <span>Edit</span>
                     </v-tooltip>
-                    <v-tooltip bottom>
+                    <!-- <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon color="error" class="mr-2" v-on="on" @click="confirmAction({ action: 'delete', data: item })">mdi-delete</v-icon>
                         </template>
                         <span>Delete</span>
-                    </v-tooltip>
+                    </v-tooltip> -->
                 </template>
                 </v-data-table>
             </v-card-text>
@@ -137,9 +137,9 @@ export default {
         first: true
       }
     },
-    mounted() {
-      this.getDataFromApi();
-    },
+    // mounted() {
+    //   this.getDataFromApi();
+    // },
     watch: {
       pagination: {
         handler () {

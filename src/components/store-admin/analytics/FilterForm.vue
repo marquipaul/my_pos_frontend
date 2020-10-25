@@ -218,7 +218,8 @@ import { mapGetters } from 'vuex'
                 end_date: this.date2,
                 deduct_order_expenses: this.deduct_order_expenses? true : null,
                 product_id: this.filterBy == 'products'? this.product_id : null,
-                category_id: this.filterBy == 'categories'? this.category_id : null
+                category_id: this.filterBy == 'categories'? this.category_id : null,
+                filterBy: this.filterBy
             }
             console.log(params)
             this.$store.dispatch('getAnalyticComputation', params)

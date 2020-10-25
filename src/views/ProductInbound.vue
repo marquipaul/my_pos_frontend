@@ -137,9 +137,9 @@ export default {
         first: true
       }
     },
-    mounted() {
-      this.getDataFromApi();
-    },
+    // mounted() {
+    //   this.getDataFromApi();
+    // },
     watch: {
       pagination: {
         handler () {
@@ -160,7 +160,7 @@ export default {
     },
     methods: {
         verifyQuantity() {
-            return this.confirmDialog.data.quantity < this.confirmDialog.data.remaining_quantity;
+            return this.confirmDialog.data.quantity <= this.confirmDialog.data.remaining_quantity;
         },
         viewProduct(item) {
             this.product = item;

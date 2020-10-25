@@ -38,14 +38,14 @@
                             </td>
                             <td class="text-right">₱{{ numberWithCommas(item.total_amount) }}</td>
                             </tr>
-                            <tr class="grey--text">
+                            <!-- <tr class="grey--text">
                             <td class="text-left">Subtotal (12% Vatable)</td>
                             <td class="text-right">₱{{ numberWithCommas(order.total_amount-(order.total_amount*0.12)) }}</td>
                             </tr>
                             <tr class="grey--text">
                             <td class="text-left">Plus 12% VAT</td>
                             <td class="text-right">₱ {{ numberWithCommas(order.total_amount*0.12) }}</td>
-                            </tr>
+                            </tr> -->
                             <tr>
                             <td class="text-left font-weight-bold">TOTAL</td>
                             <td class="text-right font-weight-bold">₱{{numberWithCommas(order.total_amount)}}</td>

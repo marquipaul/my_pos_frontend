@@ -107,9 +107,9 @@ export default {
         first: true
       }
     },
-    mounted() {
-      this.getDataFromApi();
-    },
+    // mounted() {
+    //   this.getDataFromApi();
+    // },
     watch: {
       pagination: {
         handler () {
