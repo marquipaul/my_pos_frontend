@@ -4,12 +4,14 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Order from '../views/Order.vue'
 import Account from '../views/Accounts.vue'
+import Customer from '../views/Customers.vue'
 import Product from '../views/Product.vue'
 import ProductInbound from '../views/ProductInbound.vue'
 import ProductOutbound from '../views/ProductOutbound.vue'
 import Expense from '../views/Expenses.vue'
 import Analytics from '../views/Analytics.vue'
 import Receipt from '../views/Receipt.vue'
+import Category from '../views/Categories.vue'
 
 
 Vue.use(VueRouter)
@@ -18,7 +20,10 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      title: 'Login | StackPoint',
+    }
   },
   {
     path: '/dashboard',
@@ -26,6 +31,7 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true,
+      title: 'Dashboard | StackPoint'
     }
   },
   {
@@ -34,6 +40,7 @@ const routes = [
     component: Order,
     meta: {
       requiresAuth: true,
+      title: 'Orders | StackPoint',
     }
   },
   {
@@ -42,7 +49,18 @@ const routes = [
     component: Account,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Accounts | StackPoint',
+    }
+  },
+  {
+    path: '/customers',
+    name: 'Customer',
+    component: Customer,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN',
+      title: 'Customers | StackPoint',
     }
   },
   {
@@ -51,7 +69,18 @@ const routes = [
     component: Product,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Products | StackPoint',
+    }
+  },
+  {
+    path: '/categories',
+    name: 'Category',
+    component: Category,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN',
+      title: 'Categories | StackPoint',
     }
   },
   {
@@ -60,7 +89,8 @@ const routes = [
     component: ProductInbound,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Inbounds | StackPoint',
     }
   },
   {
@@ -69,7 +99,8 @@ const routes = [
     component: ProductOutbound,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Outbounds | StackPoint',
     }
   },
   {
@@ -78,7 +109,8 @@ const routes = [
     component: Expense,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Expenses | StackPoint',
     }
   },
   {
@@ -87,13 +119,17 @@ const routes = [
     component: Analytics,
     meta: {
       requiresAuth: true,
-      permission: 'STOREADMIN'
+      permission: 'STOREADMIN',
+      title: 'Analytic Report | StackPoint',
     }
   },
   {
     path: '/customer/receipt/:id/:code',
     name: 'Receipt',
     component: Receipt,
+    meta: {
+      title: 'Customer Receipt | StackPoint',
+    }
   }
 ]
 

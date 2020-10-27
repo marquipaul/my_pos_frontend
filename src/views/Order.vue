@@ -27,7 +27,7 @@
           <span>{{item.customer? item.customer.name : 'N/A'}}</span>
         </template>
         <template v-slot:item.total_amount="{ item }">
-          <span>₱{{item.total_amount}}</span>
+          <span>{{numberWithCommas(item.total_amount)}}</span>
         </template>
         <template v-slot:item.order_status="{ item }">
           <v-switch

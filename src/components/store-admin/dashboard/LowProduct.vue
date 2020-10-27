@@ -35,13 +35,13 @@
                 </v-chip>
                 </template>
                 <template v-slot:item.cost_price="{ item }">
-                    ₱{{item.cost_price}}
+                    {{numberWithCommas(item.cost_price)}}
                 </template>
                 <template v-slot:item.wholesale_price="{ item }">
-                    ₱{{item.wholesale_price}}
+                    {{numberWithCommas(item.wholesale_price)}}
                 </template>
                 <template v-slot:item.retail_price="{ item }">
-                    ₱{{item.retail_price}}
+                    {{numberWithCommas(item.retail_price)}}
                 </template>
                 </v-data-table>
             </v-card-text>

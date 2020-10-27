@@ -56,6 +56,8 @@ export default {
             navigations: [
                 {name: 'Dashboard', icon: 'mdi-view-dashboard', route: 'dashboard'},
                 {name: 'Accounts', icon: 'mdi-account-multiple', route: 'accounts'},
+                {name: 'Customers', icon: 'mdi-file-account', route: 'customers'},
+                {name: 'Category', icon: 'mdi-format-list-checks', route: 'categories'},
                 {name: 'Products', icon: 'mdi-clipboard-check', route: 'products'},
                 {name: 'Product Inbound', icon: 'mdi-inbox-arrow-down', route: 'product-inbounds'},
                 {name: 'Product Outbound', icon: 'mdi-inbox-arrow-up', route: 'product-outbounds'},

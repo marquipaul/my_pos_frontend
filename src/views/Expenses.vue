@@ -29,6 +29,9 @@
                 <template v-slot:item.created_at="{ item }">
                     {{moment(item.created_at).format('llll')}}
                 </template>
+                <template v-slot:item.expense_amount="{ item }">
+                    {{numberWithCommas(item.expense_amount)}}
+                </template>
                 <template v-slot:item.action="{ item }">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">

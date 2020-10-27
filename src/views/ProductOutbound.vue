@@ -40,10 +40,10 @@
                 </v-chip>
                 </template>
                 <template v-slot:item.amount="{ item }">
-                    ₱{{item.amount}}
+                    {{numberWithCommas(item.amount)}}
                 </template>
                 <template v-slot:item.total_amount="{ item }">
-                    ₱{{item.total_amount}}
+                    {{numberWithCommas(item.total_amount)}}
                 </template>
                 <template v-slot:item.action="{ item }">
                     <v-tooltip bottom>

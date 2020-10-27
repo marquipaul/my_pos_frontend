@@ -48,15 +48,15 @@
                         <td>{{ item.description }}</td>
                         <td>{{ item.price_type }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td>₱{{ item.amount }}</td>
-                        <td>₱{{ item.total_amount }}</td>
+                        <td>{{ numberWithCommas(item.amount) }}</td>
+                        <td>{{ numberWithCommas(item.total_amount) }}</td>
                         </tr>
                         <tr>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold">Total Amount</td>
-                        <td class="font-weight-bold">₱{{ order.total_amount }}</td>
+                        <td class="font-weight-bold">{{ numberWithCommas(order.total_amount) }}</td>
                         </tr>
                     </tbody>
                     

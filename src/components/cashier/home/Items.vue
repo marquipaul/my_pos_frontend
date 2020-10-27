@@ -83,7 +83,7 @@
                     @click="addItem(product, category_index, product_index)"
                     :disabled="checkValidQuantity(product)"
                 >
-                    Add to Cart ₱{{getPrice(product)}}
+                    Add to Cart {{numberWithCommas(getPrice(product))}}
                 </v-btn>
                 </v-card-actions>
             </v-card>

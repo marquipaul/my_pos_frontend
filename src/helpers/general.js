@@ -1,5 +1,6 @@
 export function initialize(store, router, axios) {
     router.beforeEach((to, from, next) => {
+      window.document.title = to.meta && to.meta.title ? to.meta.title : 'StackPoint';
         const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
         const token = store.state.auth.token;
     

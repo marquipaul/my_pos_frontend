@@ -61,7 +61,7 @@
             </v-list-item>
                 <v-list-item>
                     <v-list-item-content class="text-center grey--text text--darken-1">
-                        <p class="caption">By submitting, you and the customer accept PMPIAS</p> 
+                        <p class="caption">By submitting, you and the customer accept StackPoint</p> 
                         <a href="#" class="caption">Terms and Condition</a>
                     </v-list-item-content>
                 </v-list-item>

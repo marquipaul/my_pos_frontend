@@ -1,12 +1,11 @@
 <template>
     <div>
-        <p class="grey--text text--darken-1">Products</p> 
-        
+      <p class="grey--text text--darken-1">Categories</p>  
         <v-card>
             <v-card-title>
                 <v-btn class="primary" @click="action({ action: 'add' })">
                     <v-icon>mdi-plus</v-icon>
-                    Create Product
+                    Create Category
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -21,8 +20,8 @@
                 <v-data-table
                     :loading="loading"
                     :headers="headers"
-                    :items="getAdminProducts.data"
-                    :server-items-length="getAdminProducts.total"
+                    :items="getCategories.data"
+                    :server-items-length="getCategories.total"
                     :options.sync="pagination"
                     :footer-props="{ 'items-per-page-options': [5, 10, 15, 25, 50, 100]}"
                     class="elevation-1"
@@ -30,39 +29,29 @@
                 <template v-slot:item.created_at="{ item }">
                     {{moment(item.created_at).format('llll')}}
                 </template>
-                <template v-slot:item.unit_quantity="{ item }">
-                <v-chip small>
-                    {{item.unit_quantity}} {{item.unit}}
-                </v-chip>
+                <template v-slot:item.total_cost_price="{ item }">
+                    {{numberWithCommas(item.total_cost_price)}}
                 </template>
-                <template v-slot:item.category="{ item }">
-                <v-chip small>
-                    {{item.category.title}}
-                </v-chip>
+                <template v-slot:item.wholesale_revenue="{ item }">
+                    {{numberWithCommas(item.wholesale_revenue)}}
                 </template>
-                <template v-slot:item.cost_price="{ item }">
-                    {{numberWithCommas(item.cost_price)}}
+                <template v-slot:item.retail_revenue="{ item }">
+                    {{numberWithCommas(item.retail_revenue)}}
                 </template>
-                <template v-slot:item.wholesale_price="{ item }">
-                    {{numberWithCommas(item.wholesale_price)}}
+                <template v-slot:item.total_wholesale_profit="{ item }">
+                    {{numberWithCommas(item.total_wholesale_profit)}}
                 </template>
-                <template v-slot:item.retail_price="{ item }">
-                    {{numberWithCommas(item.retail_price)}}
+                <template v-slot:item.total_retail_profit="{ item }">
+                    {{numberWithCommas(item.total_retail_profit)}}
                 </template>
                 <template v-slot:item.action="{ item }">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-icon color="primary" class="mr-2" v-on="on" @click="action({ action: 'view-product', data: item })">mdi-eye</v-icon>
-                        </template>
-                        <span>Show More</span>
-                    </v-tooltip>
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon color="success" class="mr-2" v-on="on" @click="confirmAction({ action: 'edit', data: item })">mdi-pencil</v-icon>
                         </template>
                         <span>Edit</span>
                     </v-tooltip>
-                    <v-tooltip bottom v-if="item.product_inbounds_count==0&&item.product_outbounds_count==0">
+                    <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon color="error" class="mr-2" v-on="on" @click="confirmAction({ action: 'delete', data: item })">mdi-delete</v-icon>
                         </template>
@@ -72,11 +61,11 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-        <FormModal v-bind="userFormDialog" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
+        <FormModal v-bind="userFormDialog" @close="close()"/>
         <v-dialog v-model="confirmDialog.show" scrollable max-width="540" color="primary" transition="scroll-y-reverse-transition" persistent>
                 <v-card>
                     <v-card-title>
-                        Confirmation
+                        {{confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'? 'Confirmation' : 'Action not permitted'}}
                         <v-spacer></v-spacer>
                         <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
@@ -86,9 +75,10 @@
                     </v-tooltip>
                     </v-card-title>
                     <v-card-text class="d-flex flex-column align-center justify-center px-9 py-4">
-                        <p class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.description}?` : 'this product?'}` }}</p>
+                        <p v-if="confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'" class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.name}?` : 'this tenant?'}` }}</p>
+                        <p v-else class="headline text-center py-4">Products are still associated with this Category.</p>
                     </v-card-text>
-                    <v-card-actions class="pa-5">
+                    <v-card-actions class="pa-5" v-if="confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'">
                         <v-row align="center" justify="center">
                             <v-col cols="12" class="d-flex justify-center pb-0">
                                 <v-btn class="confirm-btn btn-min-width" depressed large dark :color="((confirmDialog.action == 'edit') ? '#2F80ED' : '#EB5757')" @click="action({ action: confirmDialog.action, data: confirmDialog.data });">{{ `${(confirmDialog.action == 'edit') ? 'Confirm' : 'Delete'}` }}</v-btn>
@@ -99,38 +89,34 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <ViewInformation v-bind="formProduct" @close="formProduct = { ...formProduct, show: false, data: {} }" />
     </div>
 </template>
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 import _ from "lodash";
 import moment from 'moment';
-import FormModal from '../components/store-admin/product/FormModal'
-import ViewInformation from '../components/store-admin/product/ViewInformation'
+import FormModal from '../components/store-admin/category/FormModal'
 export default {
-  components: { FormModal, ViewInformation },
+  components: { FormModal },
     data () {
       return {
         moment: moment,
         loading: false,
         search: '',
         dialog: false,
-        viewInfo: false,
-        product: {},
         pagination: {},
         userFormDialog: { show: false, action: '', data: {} },
         confirmDialog : { show: false, action: '', data: {} },
-        formProduct: { show: false, action: '', data: {} },
         headers: [
-          { text: 'Item Code', value: 'item_code' },
+          { text: 'Category Name', value: 'title' },
           { text: 'Description', value: 'description' },
-          { text: 'Category', value: 'category', sortable: false },
-          { text: 'Unit Quantity', value: 'unit_quantity' },
-          { text: 'Quantity', value: 'quantity' },
-          { text: 'Cost Price', value: 'cost_price' },
-          { text: 'Wholesale Price', value: 'wholesale_price' },
-          { text: 'Retail Price', value: 'retail_price' },
+          { text: 'Total Cost Price', value: 'total_cost_price', sortable: false },
+          { text: 'Wholesale Revenue', value: 'wholesale_revenue', sortable: false },
+          { text: 'Retail Revenue', value: 'retail_revenue', sortable: false},
+          { text: 'Total Wholesale Profit', value: 'total_wholesale_profit', sortable: false},
+          { text: 'Total Retail Profit', value: 'total_retail_profit', sortable: false},
+          //{ text: 'Address', value: 'address' },
           { text: 'Created At', value: 'created_at' },
           { text: 'Action', value: 'action' },
         ],
@@ -159,10 +145,10 @@ export default {
       ),
     },
     methods: {
-        viewProduct(item) {
-            this.product = item;
-            this.viewInfo = true;
-        },
+      close() {
+          this.userFormDialog = { ...this.userFormDialog, show: false, data: {} }
+          this.getDataFromApi()
+      },
       getDataFromApi() {
         this.loading = true
           if (this.first) {
@@ -172,25 +158,25 @@ export default {
 
           this.first = false
           let params = {
+            whole: true,
             search: this.search,
             page: this.pagination.page,
             per_page: this.pagination.itemsPerPage,
             sort_by: this.pagination.sortBy[0],
             sort_order: this.pagination.sortDesc[0]? 'DESC' : 'ASC',
           }
-        this.$store.dispatch('getAdminProducts', params)
+        this.$store.dispatch('getCategories', params)
           .then(res => {
               this.loading = false
-            console.log(res)
           })
           .catch(error => {
               this.loading = false
-            console.log(error)
           })
       },
       confirmAction({ action, data }) {
-        this.confirmDialog = { show: true, action, data };
-        },
+          // console.log(action, data);
+          this.confirmDialog = { show: true, action, data };
+      },
       action({ action, data }) {
             // console.log(action, data);
             switch (action) {
@@ -205,19 +191,16 @@ export default {
                     this.confirmDialog.show = false;
                     this.deleteUser();
                     break;
-                case 'view-product':
-                    this.formProduct = { show: true, action, data };
-                    break;
             }
         },
         deleteUser() {
             console.log(this.confirmDialog)
             this.loading = true
-            this.$store.dispatch('deleteProduct', this.confirmDialog.data.id)
+            this.$store.dispatch('deleteCategory', this.confirmDialog.data.id)
                 .then(res => {
                     this.loading = false
                     console.log(res)
-                    this.snackbar('success', 'Product Successfully Deleted');
+                    this.snackbar('success', 'Category Successfully Deleted');
                 })
                 .catch(error => {
                     this.loading = false
@@ -235,9 +218,9 @@ export default {
         },
     },
     computed: {
-        ...mapGetters({
-        getAdminProducts: 'getAdminProducts'
-        })
-    },
-}
+    ...mapGetters({
+      getCategories: 'getWholeCategories'
+    })
+  },
+  }
 </script>

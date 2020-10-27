@@ -44,7 +44,7 @@
                       <td>{{ i+1 }}</td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.mobile_number? item.mobile_number : 'N/A'}}</td>
-                      <td>₱ {{ item.total_amount }}</td>
+                      <td>{{ numberWithCommas(item.total_amount) }}</td>
                     </tr>
                   </tbody>
                 </template>

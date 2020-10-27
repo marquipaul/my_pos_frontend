@@ -24,7 +24,7 @@
                     :key="i"
                     >
                     <td>{{ item.description }}</td>
-                    <td>₱ {{ numberWithCommas(item.value) }}</td>
+                    <td>{{ numberWithCommas(item.value) }}</td>
                     </tr>
                 </tbody>
                 </template>
@@ -47,11 +47,7 @@ export default {
             ]
         }
     },
-    methods: {
-        numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        },
-    },
+
     watch: {
         analyticsResult: {
             handler() {

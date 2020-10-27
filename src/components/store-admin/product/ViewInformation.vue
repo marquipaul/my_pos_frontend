@@ -71,7 +71,7 @@
                         if (key === 'created_at') {
                              this.productInfo.push({text: 'Created At', value: to[key]? `${this.formatDate(to[key])} ${new Date(to[key]).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}` : 'N/A'})
                         } else if (key != 'item_code' && key != 'unit' && key != 'quantity' && key != 'description' && key != 'unit_quantity' && key != 'minimum_stock' && key != 'minimum_wholesale_order' && key != 'created_at') {
-                            this.productInfo.push({text: key, value: to[key]? `₱ ${to[key]}` : 'N/A'})
+                            this.productInfo.push({text: key, value: to[key]? this.numberWithCommas(to[key]) : 'N/A'})
                         } else {
                             this.productInfo.push({text: key, value: to[key]? to[key] : 'N/A'})
                         }

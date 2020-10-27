@@ -150,8 +150,8 @@
                     >
                     <td>{{ item.description }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>₱{{ item.price }}</td>
-                    <td>₱{{ item.amount }}</td>
+                    <td>{{ numberWithCommas(item.price) }}</td>
+                    <td>{{ numberWithCommas(item.amount) }}</td>
                     <td>
                       <v-btn
                         icon
