@@ -25,6 +25,8 @@
                     :rules="[$validate.rules.required, $validate.rules.email]"
                     label="E-mail Address"
                     required
+                    :error-messages="emailErrors"
+                    @keyup="emailErrors = []"
                 ></v-text-field>
                 <v-text-field
                     v-model="formData.mobile_number"
@@ -32,6 +34,8 @@
                     label="Mobile Number"
                     required
                     type="number"
+                    :error-messages="numberErrors"
+                    @keyup="numberErrors = []"
                 ></v-text-field>
                 <v-radio-group
                     v-model="formData.user_type"
@@ -81,7 +85,10 @@ export default {
             loading: false,
             formData: {},
             showPass: false,
-            dialog: false
+            dialog: false,
+            errors: [],
+            emailErrors: [],
+            numberErrors: []
         }
     },
     watch: {
@@ -118,8 +125,15 @@ export default {
                     this.snackbar('success', `${this.action == 'edit'? 'Account Successfully Updated' : 'Account Successfully Created'}`);
                 })
                 .catch(error => {
-                    console.log(error)
-                    this.snackbar('error', 'Something went wrong');
+                    this.loading = false
+                    if (error.response.data.errors.email) {
+                        this.emailErrors = error.response.data.errors.email[0];
+                    }
+                    if (error.response.data.errors.mobile_number) {
+                        this.numberErrors = error.response.data.errors.mobile_number[0];
+                    }
+                    //var mobile_msg = error.response.data.errors.mobile_number.length > 0? error.response.data.errors.mobile_number[0] : '';
+                    this.snackbar('error', `${error.response.data.message}`);
                 })
         },
         closeModal() {

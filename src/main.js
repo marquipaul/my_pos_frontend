@@ -9,6 +9,7 @@ import {initialize} from './helpers/general';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+
 Vue.config.productionTip = false
 
 // Inputs Validation
@@ -41,11 +42,15 @@ Vue.mixin({
   }
 })
 
-axios.defaults.baseURL = 'https://api.stock-points.com'
+
+
+axios.defaults.baseURL = process.env.VUE_APP_API_URL
 //axios.defaults.baseURL = 'http://product-pos.test'
 //axios.defaults.baseURL = 'http://44939e9bfd8a.ngrok.io/'
 //axios.defaults.baseURL = `http://${window.location.hostname}:8000/`
 //axios.defaults.baseURL = 'http://islanderposapp-env.eba-i4mn5qhg.ap-southeast-1.elasticbeanstalk.com/'
+
+console.log('BASE URL', process.env.VUE_APP_API_URL)
 
 initialize(store, router, axios);
 
