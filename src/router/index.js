@@ -22,7 +22,7 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: {
-      title: 'Login | StackPoint',
+      title: 'Login | StockPoints',
     }
   },
   {
@@ -31,7 +31,7 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true,
-      title: 'Dashboard | StackPoint'
+      title: 'Dashboard | StockPoints'
     }
   },
   {
@@ -40,7 +40,7 @@ const routes = [
     component: Order,
     meta: {
       requiresAuth: true,
-      title: 'Orders | StackPoint',
+      title: 'Orders | StockPoints',
     }
   },
   {
@@ -50,7 +50,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Accounts | StackPoint',
+      title: 'Accounts | StockPoints',
     }
   },
   {
@@ -60,7 +60,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Customers | StackPoint',
+      title: 'Customers | StockPoints',
     }
   },
   {
@@ -70,7 +70,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Products | StackPoint',
+      title: 'Products | StockPoints',
     }
   },
   {
@@ -80,7 +80,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Categories | StackPoint',
+      title: 'Categories | StockPoints',
     }
   },
   {
@@ -90,7 +90,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Inbounds | StackPoint',
+      title: 'Inbounds | StockPoints',
     }
   },
   {
@@ -100,7 +100,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Outbounds | StackPoint',
+      title: 'Outbounds | StockPoints',
     }
   },
   {
@@ -110,7 +110,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Expenses | StackPoint',
+      title: 'Expenses | StockPoints',
     }
   },
   {
@@ -120,7 +120,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Analytic Report | StackPoint',
+      title: 'Analytic Report | StockPoints',
     }
   },
   {
@@ -128,7 +128,7 @@ const routes = [
     name: 'Receipt',
     component: Receipt,
     meta: {
-      title: 'Customer Receipt | StackPoint',
+      title: 'Customer Receipt | StockPoints',
     }
   }
 ]
