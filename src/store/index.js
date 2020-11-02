@@ -16,6 +16,8 @@ import productOutbound from './modules/product-outbound';
 import expenses from './modules/expenses';
 import dashboard from './modules/dashboard';
 import analytic from './modules/analytic';
+import message from './modules/message';
+import billing from './modules/billing';
 
 export default new Vuex.Store({
   state: {
@@ -73,6 +75,8 @@ export default new Vuex.Store({
     productOutbound,
     expenses,
     dashboard,
-    analytic
+    analytic,
+    message,
+    billing
   }
 })

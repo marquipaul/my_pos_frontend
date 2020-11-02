@@ -20,6 +20,10 @@ const mutations = {
         state.orders.data[updateIndex].payment_status = payload.payment_status
         // order_status: item.order_status,
         //   payment_status: item.payment_status,
+    },
+    DELETE_ORDER(state, id) {
+        let deleteIndex = state.orders.data.findIndex(item => item.id === id);
+        state.orders.data.splice(deleteIndex, 1)
     }
 };
 const actions = {
@@ -55,6 +59,19 @@ const actions = {
             .then(response => {
                 console.log(response.data)
                 context.commit('SET_ORDERS', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
+    deleteOrder(context, id){
+        return new Promise((resolve, reject) => {
+            axios.delete(`/api/orders/${id}`)
+            .then(response => {
+                console.log(response.data)
+                context.commit('DELETE_ORDER', id)
                 resolve(response)
             })
             .catch(error => {

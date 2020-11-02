@@ -25,9 +25,6 @@ export default {
     Sidebar,
     Snackbar
   },
-  data: () => ({
-    //
-  }),
     computed: {
       loggedIn(){
         return this.$store.getters.loggedIn
@@ -41,11 +38,12 @@ export default {
     }
 };
 </script>
-<style>
+<style lang="scss">
   .v-card {
     border-radius: 7px !important;
   }
   .v-main__wrap{
     background-color: #FAFAFA;
   }
+
 </style>

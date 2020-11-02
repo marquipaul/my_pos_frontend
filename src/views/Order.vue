@@ -2,8 +2,8 @@
     <div>
       <p class="grey--text text--darken-1">Orders</p>
       <v-card>
-        <!-- <v-card-title>
-                Create new Order using a Cashier Account
+        <v-card-title>
+                
                 <v-spacer></v-spacer>
                 <v-text-field
                     v-model="search"
@@ -12,7 +12,7 @@
                     single-line
                     hide-details
                 ></v-text-field>
-            </v-card-title> -->
+            </v-card-title>
       <v-card-text>
         <v-data-table
             :loading="loading"
@@ -23,9 +23,6 @@
             :footer-props="{ 'items-per-page-options': [5, 10, 15, 25, 50, 100]}"
             class="elevation-1"
         >
-        <template v-slot:item.customer="{ item }">
-          <span>{{item.customer? item.customer.name : 'N/A'}}</span>
-        </template>
         <template v-slot:item.total_amount="{ item }">
           <span>{{numberWithCommas(item.total_amount)}}</span>
         </template>
@@ -52,17 +49,73 @@
           {{moment(item.created_at).format('llll')}}
         </template>
         <template v-slot:item.action="{ item }">
-          <v-btn @click="viewProducts(item)" icon text>
-            <v-icon>mdi-eye</v-icon>
-          </v-btn>
+          <v-tooltip bottom v-if="currentUser.user_type == 'STOREADMIN'">
+              <template  v-slot:activator="{ on }">
+                <v-btn v-on="on"  :loading="sendLoading == item.id" color="primary" @click="sendRceipt(item)" icon text>
+                  <v-icon>mdi-send</v-icon>
+                </v-btn>
+              </template>
+              <span>Resend Receipt</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on" color="success" @click="viewProducts(item)" icon text>
+                  <v-icon>mdi-eye</v-icon>
+                </v-btn>
+              </template>
+              <span>Show More</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+              <template v-if="currentUser.user_type == 'STOREADMIN'" v-slot:activator="{ on }">
+                <v-btn v-on="on" v-if="currentUser.user_type == 'STOREADMIN'" color="error" @click="confirmAction({ action: 'delete', data: item })" icon text>
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>Delete Order</span>
+          </v-tooltip>
         </template>
         </v-data-table>
       </v-card-text>
     </v-card>
         <List :dialog="dialog" :order="selectedOrder" @close="dialog=false" />
+        <v-dialog v-model="confirmDialog.show" scrollable max-width="540" color="primary" transition="scroll-y-reverse-transition" persistent>
+                <v-card>
+                    <v-card-title>
+                        Confirmation
+                        <v-spacer></v-spacer>
+                        <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon class="dialog-close" v-on="on" @click="confirmDialog.show = false">mdi-close</v-icon>
+                        </template>
+                        <span>Close</span>
+                    </v-tooltip>
+                    </v-card-title>
+                    <v-card-text class="d-flex flex-column align-center justify-center px-9 py-4">
+                        <p class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete order'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.order_code}?` : ''}` }}</p>
+                        <p class="caption mt-n6">Please enter the Order Number for Confirmation</p>
+                        <v-text-field
+                          class="mt-n2"
+                          solo
+                          type="number"
+                          v-model="delete_order_code"
+                          label="Order Number"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-card-actions class="pa-5">
+                        <v-row align="center" justify="center">
+                            <v-col cols="12" class="d-flex justify-center pb-0">
+                                <v-btn :disabled="delete_order_code != confirmDialog.data.order_code" class="confirm-btn btn-min-width white--text" depressed large :color="((confirmDialog.action == 'edit') ? '#2F80ED' : '#EB5757')" @click="action({ action: confirmDialog.action, data: confirmDialog.data });">{{ `${(confirmDialog.action == 'edit') ? 'Confirm' : 'Delete'}` }}</v-btn>
+
+                                <v-btn class="btn-min-width" text large @click="confirmDialog.show = false">Cancel</v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
     </div>
 </template>
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 import moment from 'moment';
 import _ from "lodash";
@@ -71,6 +124,8 @@ export default {
   components: { List },
     data () {
       return {
+        delete_order_code: '',
+        confirmDialog : { show: false, action: '', data: {} },
         moment: moment,
         selectedOrder: {},
         dialog: false,
@@ -82,7 +137,7 @@ export default {
             text: 'Customer',
             align: 'start',
             sortable: false,
-            value: 'customer',
+            value: 'customer_name',
           },
           { text: 'Product Count', value: 'product_count' },
           { text: 'Total Amount', value: 'total_amount' },
@@ -94,7 +149,8 @@ export default {
         ],
         form: {},
         first: true,
-        loading: false
+        loading: false,
+        sendLoading: undefined
       }
     },
     // mounted() {
@@ -119,9 +175,69 @@ export default {
       ),
     },
     methods: {
+      confirmAction({ action, data }) {
+        this.confirmDialog = { show: true, action, data };
+        },
+      action({ action, data }) {
+            // console.log(action, data);
+            switch (action) {
+                case 'add':
+                    this.userFormDialog = { show: true, action, data: {} };
+                    break;
+                case 'edit':
+                    this.confirmDialog.show = false;
+                    this.userFormDialog = { show: true, action, data }
+                    break;
+                case 'delete':
+                    this.confirmDialog.show = false;
+                    this.deleteOrder();
+                    break;
+            }
+        },
+        deleteOrder() {
+            console.log(this.confirmDialog)
+            this.loading = true
+            this.$store.dispatch('deleteOrder', this.confirmDialog.data.id)
+                .then(res => {
+                    this.loading = false
+                    this.delete_order_code = ''
+                    console.log(res)
+                    this.snackbar('success', 'Order Successfully Deleted');
+                })
+                .catch(error => {
+                    this.loading = false
+                    console.log(error)
+                    this.snackbar('error', 'Something went wrong');
+                })
+        },
       viewProducts(item) {
         this.dialog = true;
         this.selectedOrder = item;
+      },
+      sendRceipt(order) {
+        this.sendLoading = order.id;
+        this.$store.dispatch('addMessageReceipt', { order_id: order.id })
+          .then(res => {
+            console.log(res)
+            this.sendLoading = undefined;
+            this.snackbar('success', 'Message Sent Successfully');
+          })
+          .catch(error => {
+            if (error.response.status == 403) {
+              this.snackbar('error', error.response.data);
+            } else {
+              this.snackbar('error', 'Something went wrong');
+            }
+            this.sendLoading = undefined;
+          })
+      },
+      snackbar(color, text) {
+        this.$store.commit('SET_SNACKBAR', { 
+            open: true, 
+            color: color, 
+            text: text,
+            timeout: 4000
+        });
       },
       orderStatus(item) {
         item.order_status = item.order_status==='PENDING'? 'RECEIVED' : 'PENDING';
@@ -180,7 +296,8 @@ export default {
     },
     computed: {
     ...mapGetters({
-      getOrders: 'getOrders'
+      getOrders: 'getOrders',
+      currentUser: 'currentUser',
     })
   },
   }

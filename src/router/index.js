@@ -12,6 +12,7 @@ import Expense from '../views/Expenses.vue'
 import Analytics from '../views/Analytics.vue'
 import Receipt from '../views/Receipt.vue'
 import Category from '../views/Categories.vue'
+import Billing from '../views/Billing.vue'
 
 
 Vue.use(VueRouter)
@@ -121,6 +122,16 @@ const routes = [
       requiresAuth: true,
       permission: 'STOREADMIN',
       title: 'Analytic Report | StockPoints',
+    }
+  },
+  {
+    path: '/billing',
+    name: 'Billing',
+    component: Billing,
+    meta: {
+      requiresAuth: true,
+      permission: 'STOREADMIN',
+      title: 'Billing Report | StockPoints',
     }
   },
   {

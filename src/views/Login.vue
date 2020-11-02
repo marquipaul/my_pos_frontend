@@ -11,40 +11,40 @@
         <v-row
           align="center"
           justify="center"
+          id="login"
         >
           <v-col
             cols="12"
-            sm="8"
-            md="4"
+            sm="6"
+            md="3"
           >
-            <v-card class="elevation-12">
+            <v-card class="elevation-4">
               <v-form @submit.prevent="validate" ref="form" lazy-validation>
-              <v-toolbar
-                class="login-toolbar"
-                color="primary"
-                dark
-                flat
-                style="border-top-right-radius: 7px; border-top-left-radius: 7px;"
-              >
-                <v-toolbar-title>Login</v-toolbar-title>
-                <div class="flex-grow-1"></div>
-              
-              </v-toolbar>
+                <v-card-title class="justify-center">
+                    <v-img max-width="250" src="~@/assets/img/finance.svg" lazy-src="~@/assets/img/finance.svg"/>
+                  </v-card-title>
+               <v-card-subtitle id="text" class="pa-0 pb-5 pt-5 text-center">Sign In to your account</v-card-subtitle>
               <v-card-text>
                   <v-text-field
+                    flat
+                    solo
+                    autofocus
+                    autocomplete="off"
                     v-model="form.username"
                     label="E-Mail Address"
                     :rules="[$validate.rules.required, $validate.rules.email]"
-                    prepend-icon="mdi-account"
+                    prepend-inner-icon="mdi-account"
                     type="text"
                     v-on:keypress.enter="validate"
                   ></v-text-field>
 
                   <v-text-field
+                    solo
+                    flat
                     v-model="form.password"
                     label="Password"
                     :rules="[$validate.rules.required]"
-                    prepend-icon="mdi-lock"
+                    prepend-inner-icon="mdi-lock"
                     :type="showPass ? 'text' : 'password'"
                     :append-icon="showPass ? 'mdi-eye-off' : 'mdi-eye'"
                     @click:append="showPass = !showPass"
@@ -55,11 +55,13 @@
               <v-card-actions>
                 <div class="flex-grow-1"></div>
                 <v-btn
+                  large
+                  depressed
                   block
                   color="primary" 
                   @click="validate" 
                   :loading="loading">
-                  Login
+                  Sign In
                   </v-btn>
               </v-card-actions>
               </v-form>
@@ -111,8 +113,28 @@
       },
   }
 </script>
-<style scoped>
-.login-toolbar {
-  border-top-right-radius: 10px;
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" >
+#login {
+    #text {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 23px;
+    }
+    .v-text-field {
+        &.theme--light {
+            .v-input__slot {
+                background-color: #FAFAFA;;
+            }
+        }
+
+        &.theme--dark {
+            .v-input__slot {
+                background-color: #212746;
+            }
+        }
+    }
 }
+  
 </style>
