@@ -133,6 +133,7 @@ export default {
         pagination: {},
         headers: [
           { text: 'Order Code', value: 'order_code' },
+          { text: 'Invoice Number', value: 'full_invoice_number' },
           {
             text: 'Customer',
             align: 'start',

@@ -2,11 +2,11 @@
   <v-row justify="center">
     <v-dialog
       v-model="dialog"
-      max-width="850px"
+      max-width="1200px"
     >
       <v-card>
         <v-card-title>
-            Product's list
+             Order #{{order.order_code}} | List of Products
             <v-spacer></v-spacer>
             <v-btn
             icon
@@ -36,10 +36,13 @@
                             Quantity
                         </th>
                         <th class="text-left">
-                            Price
+                            Amount
                         </th>
                         <th class="text-left">
                             Cost Price
+                        </th>
+                        <th class="text-left">
+                            Total Amount
                         </th>
                         <th class="text-left">
                             Total Cost Price
@@ -59,11 +62,13 @@
                         <td>{{ item.price_type }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ numberWithCommas(item.amount) }}</td>
+                        <td>{{ numberWithCommas(item.cost_price) }}</td>
                         <td>{{ numberWithCommas(item.total_amount) }}</td>
                         <td>{{ numberWithCommas(item.total_cost_price) }}</td>
                         <td>{{ numberWithCommas(item.total_profit) }}</td>
                         </tr>
                         <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

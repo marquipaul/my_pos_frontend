@@ -16,7 +16,7 @@
             </v-list-item-avatar> -->
             <v-list-item-avatar color="primary">
                 <!-- <span class="white--text headline">{{currentUser.name.charAt(0)}}</span> -->
-                <span class="white--text headline">A</span>
+                <span class="white--text headline">{{ currentUser.name.charAt(0) }}</span>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{currentUser.name}}</v-list-item-title>

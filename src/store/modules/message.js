@@ -50,7 +50,7 @@ const actions = {
             })
         })
     },
-    updateAccount(context, payload){
+    updateMessage(context, payload){
         return new Promise((resolve, reject) => {
             axios.put(`/api/messages/${payload.id}`, payload)
             .then(response => {
@@ -63,7 +63,7 @@ const actions = {
             })
         })
     },
-    deleteAccount(context, id){
+    deleteMessage(context, id){
         return new Promise((resolve, reject) => {
             axios.delete(`/api/messages/${id}`)
             .then(response => {
