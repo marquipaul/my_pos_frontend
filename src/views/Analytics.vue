@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="grey--text text--darken-1">Analytic Reports</p>  
+        <p class="grey--text text--darken-1">Income Reports</p>  
         <v-row>
             <v-col cols="12" xl="6" lg="6" md="6">
                 <FilterForm @deduction="deduction = !deduction" />

@@ -6,7 +6,7 @@
     >
       <v-card>
         <v-card-title>
-             Order #{{order.order_code}} | List of Products
+             Order #{{order.order_code}}
             <v-spacer></v-spacer>
             <v-btn
             icon

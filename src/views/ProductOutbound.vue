@@ -205,17 +205,17 @@ export default {
                     break;
                 case 'delete':
                     this.confirmDialog.show = false;
-                    this.deleteUser();
+                    this.deleteOutbound();
                     break;
                 case 'view-product':
                     this.formProduct = { show: true, action, data };
                     break;
             }
         },
-        deleteUser() {
+        deleteOutbound() {
             console.log(this.confirmDialog)
             this.loading = true
-            this.$store.dispatch('deleteInbound', this.confirmDialog.data.id)
+            this.$store.dispatch('deleteOutbound', this.confirmDialog.data.id)
                 .then(res => {
                     this.loading = false
                     console.log(res)

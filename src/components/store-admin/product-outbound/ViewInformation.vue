@@ -60,7 +60,7 @@
                 this.productInfo = [];
                 // console.log('Personal Information', to);
                 for (var key in to) {
-                    if (key != 'id' && key != 'product_id' && key != 'order_id' && key != 'store_id' && key != 'user_id' && key != 'updated_at' && key != 'deleted_at' && key != 'category_id') {
+                    if (key != 'id' && key != 'product_id' && key != 'product_inbound_id' && key != 'order_id' && key != 'store_id' && key != 'user_id' && key != 'updated_at' && key != 'deleted_at' && key != 'category_id') {
                         if (key === 'created_at') {
                              this.productInfo.push({text: 'Created At', value: to[key]? `${this.formatDate(to[key])} ${new Date(to[key]).toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}` : 'N/A'})
                         } else if (key != 'price_type' && key != 'order_code' && key != 'item_code' && key != 'remaining_quantity' && key != 'unit' && key != 'quantity' && key != 'description' && key != 'unit_quantity' && key != 'minimum_stock' && key != 'minimum_wholesale_order' && key != 'created_at') {

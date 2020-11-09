@@ -87,10 +87,10 @@ export default {
     },
     methods: {
         submitCustomer() {
-            this.loading = true;
             var status = this.$refs.form.validate();
             console.log(status)
             if (status) {
+                this.loading = true;
                 this.$store.dispatch('addCustomer', this.form)
                     .then(response => {
                         console.log(response)

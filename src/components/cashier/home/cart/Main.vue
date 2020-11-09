@@ -187,9 +187,9 @@
             <v-list-item>
                 <v-text-field
                     :rules="[$validate.rules.required]"
-                    label="Paid Amount"
+                    label="Cash Tenered"
                     type="number"
-                    v-model="paid_amount"
+                    v-model="form.cash_tenered"
                 ></v-text-field>
             </v-list-item>
             <v-list-item>
@@ -219,13 +219,13 @@
     },
     data () {
       return {
-        paid_amount: 0,
         registerCustomer: false,
         dialog: false,
         form: {
             transaction_type: 'PICKUP',
             order_status: 'RECEIVED',
-            payment_status: 'PAID'
+            payment_status: 'PAID',
+            cash_tenered: 0
         },
         customer_id: undefined,
         loading: false,
@@ -238,7 +238,7 @@
     },
     methods: {
       verifyCart() {
-        this.changeStatus = this.paid_amount < this.totalAmount;
+        this.changeStatus = this.form.cash_tenered < this.totalAmount;
         var cartStatus = this.cartItems.length<1;
         if (!cartStatus&!this.changeStatus) {
           if (cartStatus!=this.changeStatus) {
@@ -282,6 +282,7 @@
               customer_id: this.customer_id,
               transaction_type: this.form.transaction_type,
               order_status: this.form.order_status,
+              cash_tenered: this.form.cash_tenered,
               payment_status: this.form.payment_status,
               products: this.cartItems
             }
@@ -312,10 +313,10 @@
         this.form = {
             transaction_type: 'PICKUP',
             order_status: 'RECEIVED',
-            payment_status: 'PAID'
+            payment_status: 'PAID',
+            cash_tenered: 0
         }
         this.customer_id = undefined;
-        this.paid_amount = 0;
       },
       checkValidQuantity(item) {
         if (item.price_type === 'RETAIL') {
@@ -338,7 +339,7 @@
     },
     computed: {
       change_amount() {
-        var amount = this.paid_amount - this.totalAmount;
+        var amount = this.form.cash_tenered - this.totalAmount;
         if (amount < 0) {
           return 0;
         } else {

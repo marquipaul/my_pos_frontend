@@ -59,15 +59,7 @@
                         ></v-date-picker>
                         </v-menu>
                     </v-col>
-                    <v-col cols="12" xl="5" lg="5">
-                        <v-switch
-                            inset
-                            dense
-                            v-model="deduct_order_expenses"
-                            label="Deduct other Expenses"
-                        ></v-switch>
-                    </v-col>
-                    <v-col cols="12" xl="7" lg="7">
+                    <v-col cols="12" >
                         <v-radio-group
                         label="Filter by"
                         v-model="filterBy"
@@ -134,7 +126,6 @@ import { mapGetters } from 'vuex'
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
       menu2: false,
-      deduct_order_expenses: true,
       filterBy: 'none',
       selection1: false,
       selection2: false,
@@ -216,7 +207,6 @@ import { mapGetters } from 'vuex'
             var params = {
                 start_date: this.date1,
                 end_date: this.date2,
-                deduct_order_expenses: this.deduct_order_expenses? true : null,
                 product_id: this.filterBy == 'products'? this.product_id : null,
                 category_id: this.filterBy == 'categories'? this.category_id : null,
                 filterBy: this.filterBy

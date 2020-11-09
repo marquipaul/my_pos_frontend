@@ -115,13 +115,13 @@ const routes = [
     }
   },
   {
-    path: '/analytics',
-    name: 'Analytics',
+    path: '/income-report',
+    name: 'Income',
     component: Analytics,
     meta: {
       requiresAuth: true,
       permission: 'STOREADMIN',
-      title: 'Analytic Report | StockPoints',
+      title: 'Income Report | StockPoints',
     }
   },
   {

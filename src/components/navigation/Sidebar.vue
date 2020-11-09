@@ -63,7 +63,7 @@ export default {
                 {name: 'Product Outbound', icon: 'mdi-inbox-arrow-up', route: 'product-outbounds'},
                 {name: 'Expenses', icon: 'mdi-cash-usd', route: 'expenses'},
                 {name: 'Orders', icon: 'mdi-view-list', route: 'orders'},
-                {name: 'Analytics', icon: 'mdi-trending-up', route: 'analytics'},
+                {name: 'Income', icon: 'mdi-trending-up', route: 'income-report'},
                 {name: 'Billing', icon: 'mdi-clipboard-text', route: 'billing'},
             ],
         }
