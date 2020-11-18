@@ -41,12 +41,12 @@ const actions = {
     },
     addMessageReceipt(context, payload){
         return new Promise((resolve, reject) => {
-            axios.post('/api/messages?sendReceipt', payload)
+            axios.post('/api/resend-sms?sendReceipt', payload)
             .then(response => {
                 resolve(response)
             })
             .catch(error => {
-                reject(error)
+                reject(error) //006699
             })
         })
     },

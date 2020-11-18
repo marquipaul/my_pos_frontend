@@ -35,7 +35,8 @@ Vue.mixin({
   methods: {
     numberWithCommas(x) {
       //Monday, Dec 28 2015 at 4:13pm
-      var number = x.toFixed(2)
+      var parseX = parseFloat(x);
+      var number = parseX.toFixed(2)
       number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       return `₱${number}`
     },

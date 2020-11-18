@@ -83,7 +83,11 @@ const actions = {
             axios.post('/api/products', payload)
             .then(response => {
                 console.log(response.data)
-                context.commit('PUSH_PRODUCT', response.data)
+                if (context.state.products.data.length === 0) {
+                    context.dispatch('getAdminProducts', {})
+                } else {
+                    context.commit('PUSH_PRODUCT', response.data)
+                }
                 resolve(response)
             })
             .catch(error => {

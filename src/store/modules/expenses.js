@@ -46,7 +46,11 @@ const actions = {
             axios.post('/api/expenses', payload)
             .then(response => {
                 console.log(response.data)
-                context.commit('PUSH_EXPENSE', response.data)
+                if (context.state.expenses.data.length === 0) {
+                    context.dispatch('getExpenses', {})
+                } else {
+                    context.commit('PUSH_EXPENSE', response.data)
+                }
                 resolve(response)
             })
             .catch(error => {

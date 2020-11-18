@@ -84,7 +84,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.post('/api/customers', payload)
             .then(response => {
-                context.commit('ADD_ADMIN_CUSTOMER', response.data)
+                if (context.state.adminCustomers.data.length === 0) {
+                    context.dispatch('getAdminCustomers', {})
+                } else {
+                    context.commit('ADD_ADMIN_CUSTOMER', response.data)
+                }
                 resolve(response)
             })
             .catch(error => {
