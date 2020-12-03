@@ -27,6 +27,30 @@
                     :footer-props="{ 'items-per-page-options': [5, 10, 15, 25, 50, 100]}"
                     class="elevation-1"
                 >
+                <template v-slot:item.product_image="{ item }">
+                    <v-card
+                        max-width="90"
+                        height="45px"
+                        >
+                        <v-img
+                            class="grey white--text text-center"
+                            width="90"
+                            height="45px"
+                            :src="`${item.images? item.images.image_url : null}`"
+                            :lazy-src="`${item.images? item.images.image_url : null}`"
+                        >
+                        <v-icon v-if="!item.images" dark large class="mt-2">
+                            mdi-camera-off
+                        </v-icon>
+                        </v-img>
+                    </v-card>
+                </template>
+                
+                <template v-slot:item.quantity="{ item }">
+                    <v-chip small :class="`${item.quantity < 1? 'error white--text' : item.minimum_stock > item.quantity? 'warning white--text' : 'success white--text'}  float-right mr-2`">
+                        {{item.quantity}}
+                    </v-chip>
+                </template>
                 <template v-slot:item.created_at="{ item }">
                     {{moment(item.created_at).format('llll')}}
                 </template>
@@ -37,7 +61,7 @@
                 </template>
                 <template v-slot:item.category="{ item }">
                 <v-chip small>
-                    {{item.category.title}}
+                    {{item.category? item.category.title : 'N/A'}}
                 </v-chip>
                 </template>
                 <template v-slot:item.cost_price="{ item }">
@@ -50,6 +74,12 @@
                     {{numberWithCommas(item.retail_price)}}
                 </template>
                 <template v-slot:item.action="{ item }">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon color="warning" class="mr-2" v-on="on" @click="action({ action: 'image-product', data: item })">mdi-camera</v-icon>
+                        </template>
+                        <span>Product Image</span>
+                    </v-tooltip>
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon color="primary" class="mr-2" v-on="on" @click="action({ action: 'view-product', data: item })">mdi-eye</v-icon>
@@ -72,7 +102,7 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-        <FormModal v-bind="userFormDialog" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
+        <FormModal v-bind="userFormDialog" @openImageCropper="actionCropper" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
         <v-dialog v-model="confirmDialog.show" scrollable max-width="540" color="primary" transition="scroll-y-reverse-transition" persistent>
                 <v-card>
                     <v-card-title>
@@ -100,6 +130,7 @@
                 </v-card>
             </v-dialog>
             <ViewInformation v-bind="formProduct" @close="formProduct = { ...formProduct, show: false, data: {} }" />
+            <ImageCropper v-bind="imageProduct" @close="imageProduct = { ...imageProduct, show: false, data: {} }" />
     </div>
 </template>
 <script>
@@ -107,9 +138,10 @@ import { mapGetters } from 'vuex'
 import _ from "lodash";
 import moment from 'moment';
 import FormModal from '../components/store-admin/product/FormModal'
+import ImageCropper from '../components/store-admin/product/ImageCropper'
 import ViewInformation from '../components/store-admin/product/ViewInformation'
 export default {
-  components: { FormModal, ViewInformation },
+  components: { FormModal, ViewInformation, ImageCropper },
     data () {
       return {
         moment: moment,
@@ -122,7 +154,9 @@ export default {
         userFormDialog: { show: false, action: '', data: {} },
         confirmDialog : { show: false, action: '', data: {} },
         formProduct: { show: false, action: '', data: {} },
+        imageProduct: { show: false, action: '', data: {} },
         headers: [
+          { text: 'Image', value: 'product_image', sortable: false },
           { text: 'Item Code', value: 'item_code' },
           { text: 'Description', value: 'description' },
           { text: 'Category', value: 'category', sortable: false },
@@ -192,7 +226,7 @@ export default {
         this.confirmDialog = { show: true, action, data };
         },
       action({ action, data }) {
-            // console.log(action, data);
+            console.log(action, data);
             switch (action) {
                 case 'add':
                     this.userFormDialog = { show: true, action, data: {} };
@@ -208,7 +242,14 @@ export default {
                 case 'view-product':
                     this.formProduct = { show: true, action, data };
                     break;
+                case 'image-product':
+                    this.imageProduct = { show: true, action, data };
+                    break;
             }
+        },
+        actionCropper(e) {
+            console.log(e)
+            this.imageProduct = { show: true, action: 'image-product', data: e };
         },
         deleteUser() {
             console.log(this.confirmDialog)

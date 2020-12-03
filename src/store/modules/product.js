@@ -108,6 +108,19 @@ const actions = {
             })
         })
     },
+    updateProductImage(context, payload){
+        return new Promise((resolve, reject) => {
+            axios.post(`/api/products/${payload.id}?updateImage`, payload)
+            .then(response => {
+                console.log(response.data)
+                context.commit('UPDATE_ADMIN_PRODUCT', response.data)
+                resolve(response)
+            })
+            .catch(error => {
+                reject(error)
+            })
+        })
+    },
     deleteProduct(context, id){
         return new Promise((resolve, reject) => {
             axios.delete(`/api/products/${id}`)

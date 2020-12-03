@@ -64,6 +64,17 @@
                   Sign In
                   </v-btn>
               </v-card-actions>
+              <v-card-actions>
+                <div class="flex-grow-1"></div>
+                <v-btn
+                  large
+                  depressed
+                  block
+                  color="primary" 
+                  to="test-print">
+                  Printer Test
+                  </v-btn>
+              </v-card-actions>
               </v-form>
             </v-card>
           </v-col>

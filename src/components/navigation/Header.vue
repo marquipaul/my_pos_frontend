@@ -110,6 +110,7 @@ export default {
       return this.$store.getters['retrieveCartItems']
     },
     totalQuantity() {
+      console.log(this.cartItems.reduce((a, b) => a + (b['quantity'] || 0), 0))
       return this.cartItems.reduce((a, b) => a + (b['quantity'] || 0), 0);
     }
   }

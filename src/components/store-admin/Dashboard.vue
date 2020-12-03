@@ -18,6 +18,19 @@
                 <TopCustomers :reload="reload" />
             </v-col>
         </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-card>
+                    <v-card-title>
+                        Monthly Sales
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <Annual />
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
     </div>
 </template>
 <script>
@@ -25,8 +38,9 @@
 import Overall from './dashboard/Overall'
 import LowStock from './dashboard/LowProduct'
 import TopCustomers from './dashboard/TopCustomers'
+import Annual from './dashboard/Annual'
 export default {
-    components: { Overall, LowStock, TopCustomers },
+    components: { Overall, LowStock, TopCustomers, Annual },
     data() {
         return {
             reload: false

@@ -26,6 +26,9 @@
                     :footer-props="{ 'items-per-page-options': [5, 10, 15, 25, 50, 100]}"
                     class="elevation-1"
                 >
+                <!-- <template v-slot:item.description="{ item }">
+                    <span class="text-truncate">{{item.description}}</span>
+                </template> -->
                 <template v-slot:item.created_at="{ item }">
                     {{moment(item.created_at).format('llll')}}
                 </template>
@@ -75,7 +78,7 @@
                     </v-tooltip>
                     </v-card-title>
                     <v-card-text class="d-flex flex-column align-center justify-center px-9 py-4">
-                        <p v-if="confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'" class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.name}?` : 'this tenant?'}` }}</p>
+                        <p v-if="confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'" class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.title}?` : '?'}` }}</p>
                         <p v-else class="headline text-center py-4">Products are still associated with this Category.</p>
                     </v-card-text>
                     <v-card-actions class="pa-5" v-if="confirmDialog.data.total_cost_price == 0||confirmDialog.action == 'edit'">
@@ -110,7 +113,7 @@ export default {
         confirmDialog : { show: false, action: '', data: {} },
         headers: [
           { text: 'Category Name', value: 'title' },
-          { text: 'Description', value: 'description' },
+          //{ text: 'Description', value: 'description' },
           { text: 'Total Cost Price', value: 'total_cost_price', sortable: false },
           { text: 'Wholesale Revenue', value: 'wholesale_revenue', sortable: false },
           { text: 'Retail Revenue', value: 'retail_revenue', sortable: false},

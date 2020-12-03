@@ -10,9 +10,8 @@
           <v-spacer></v-spacer>
           <v-btn 
             @click="registerCustomer = !registerCustomer" 
-            x-small 
-            text 
-            class="grey--text text--darken-1 mt-n1"
+            x-small
+            :class="registerCustomer? 'error darken-1 mt-n1' : 'success darken-1 mt-n1'"
             >
             {{registerCustomer? 'Cancel' : 'Register a Customer'}}
             
@@ -129,7 +128,7 @@
                     <th class="text-left">
                         Description
                     </th>
-                    <th class="text-left">
+                    <th class="text-left" width="40%">
                         Quantity
                     </th>
                     <th class="text-left">
@@ -149,7 +148,18 @@
                     :key="index"
                     >
                     <td>{{ item.description }}</td>
-                    <td>{{ item.quantity }}</td>
+                    <td>
+                      <v-text-field
+                        style="font-size: 0.8rem;"
+                        v-model="item.quantity"
+                        type="number"
+                        min="1"
+                        @input="computeAmount(item)"
+                        @keypress="checkValidValue"
+                        outlined
+                        dense
+                      ></v-text-field>
+                    </td>
                     <td>{{ numberWithCommas(item.price) }}</td>
                     <td>{{ numberWithCommas(item.amount) }}</td>
                     <td>
@@ -270,6 +280,24 @@
       addQuantity(item) {
         this.$store.dispatch('addQuantity', item)
       },
+      computeAmount(item) {
+        item.quantity = parseInt(item.quantity)
+        this.$store.commit('COMPUTE_AMOUNT', item)
+      },
+      checkValidValue(e) {
+        //setTimeout(() => {
+          console.log('Checking Zero', e.target.value)
+          if (e.target.value.charAt(0) == 0 && e.keyCode == 48) {
+            return e.preventDefault();
+          }
+        //}, 10);
+        console.log('Checking', e.target.value, e)
+        if(!((e.keyCode > 95 && e.keyCode < 106)
+          || (e.keyCode > 47 && e.keyCode < 58) 
+          || e.keyCode == 8)) {
+            return e.preventDefault();
+        }
+      },
       deductQuantity(item) {
         this.$store.dispatch('deductQuantity', item)
       },
@@ -358,3 +386,16 @@
     }
   }
 </script>
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>

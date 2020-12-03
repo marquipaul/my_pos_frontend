@@ -14,6 +14,8 @@ import Receipt from '../views/Receipt.vue'
 import Category from '../views/Categories.vue'
 import Billing from '../views/Billing.vue'
 
+import PrinterTest from '../views/PrinterTest.vue'
+
 
 Vue.use(VueRouter)
 
@@ -140,6 +142,14 @@ const routes = [
     component: Receipt,
     meta: {
       title: 'Customer Receipt | StockPoints',
+    }
+  },
+  {
+    path: '/test-print',
+    name: 'TEST PRINT',
+    component: PrinterTest,
+    meta: {
+      title: 'TEST PRINT | StockPoints',
     }
   }
 ]

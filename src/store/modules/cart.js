@@ -30,6 +30,11 @@ const mutations = {
         state.items[updateIndex].quantity--;
         state.items[updateIndex].amount = state.items[updateIndex].price * state.items[updateIndex].quantity;
     },
+    COMPUTE_AMOUNT(state, payload){
+        let updateIndex = state.items.findIndex(item => item.product_id === payload.product_id);
+        state.items[updateIndex].quantity = payload.quantity;
+        state.items[updateIndex].amount = state.items[updateIndex].price * state.items[updateIndex].quantity;
+    },
     ADD_WHOLESALE_QUANTITY(state, payload){
         let updateIndex = state.items.findIndex(item => item.product_id === payload.product_id);
         state.items[updateIndex].quantity = state.items[updateIndex].quantity+payload.minimum_wholesale_order;

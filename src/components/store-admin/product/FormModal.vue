@@ -121,7 +121,6 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-    //props: ['dialog', 'accountForm'],
     props: {
         show: { type: Boolean, default: false, required: true },
         action: { type: String, default: '' },
@@ -207,6 +206,9 @@ export default {
                     console.log(res)
                     this.closeModal()
                     this.snackbar('success', `${this.action == 'edit'? 'Product Successfully Updated' : 'Product Successfully Created'}`);
+                    if (this.action != 'edit') {
+                        this.$emit('openImageCropper', res.data);
+                    }
                 })
                 .catch(error => {
                     console.log(error)
