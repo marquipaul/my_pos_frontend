@@ -216,6 +216,9 @@
                     Check Out ₱{{totalAmount}}
                 </v-btn>
             </v-list-item>
+            <v-list-item v-if="getDeviceType() != 'desktop'">
+                <ThermalPrinter v-bind="printerState" @done="printerState = { ...printerState, print: false, data: {} }" />
+            </v-list-item>
         </v-list>
     </v-form>
   </div>
@@ -223,9 +226,11 @@
 <script>
 /* eslint-disable */
   import CreateCustomer from '../../../CreateCustomer'
+  import ThermalPrinter from '../../../ThermalPrinter'
   export default {
     components: {
-      CreateCustomer
+      CreateCustomer,
+      ThermalPrinter
     },
     data () {
       return {
@@ -240,13 +245,28 @@
         customer_id: undefined,
         loading: false,
         loadingCart: false,
-        changeStatus: false
+        changeStatus: false,
+        printerState: { print: false, data: {} },
       }
     },
     mounted() {
       this.getDataFromAPI();
     },
     methods: {
+      getDeviceType() {
+          const ua = navigator.userAgent;
+          if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+            return "tablet";
+          }
+          if (
+            /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+              ua
+            )
+          ) {
+            return "mobile";
+          }
+          return "desktop";
+      },
       verifyCart() {
         this.changeStatus = this.form.cash_tenered < this.totalAmount;
         var cartStatus = this.cartItems.length<1;
@@ -316,6 +336,10 @@
             }
             this.$store.dispatch('placeOrder', form)
               .then(response => {
+                console.log(response)
+                if (response.status === 200) {
+                  this.printerState = { print: true, data: response.data }
+                }
                 this.$store.commit('SET_LOADING', false);
                 this.clearOrder();
                 this.defaulData();

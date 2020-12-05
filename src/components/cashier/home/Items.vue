@@ -42,12 +42,16 @@
             :key="product_index"
             xl="2"
             lg="3"
-            md="6"
-            sm="12"
+            md="4"
+            sm="6"
             xs="12"
             cols="12"
           >
-            <v-card class="text-center"> 
+            <v-card 
+              class="text-center"
+              @click="addItem(product, category_index, product_index)"
+              :disabled="checkValidQuantity(product)"
+            > 
               <v-img
                 :class="product.image_url? '' : 'grey'"
                 height="175px"
@@ -98,8 +102,6 @@
                     small
                     color="primary"
                     text
-                    @click="addItem(product, category_index, product_index)"
-                    :disabled="checkValidQuantity(product)"
                 >
                     Add to Cart {{numberWithCommas(getPrice(product))}}
                 </v-btn>
@@ -107,7 +109,6 @@
             </v-card>
           </v-col>
         </v-row>
-        
   </div>
 </template>
 
@@ -196,6 +197,7 @@ export default {
     },
     submitItem(product) {
       this.$store.dispatch('addProductToCart', product);
+      this.snackbar('success', 'Product has been added to the Cart');
     },
     snackbar(color, text) {
         this.$store.commit('SET_SNACKBAR', { 

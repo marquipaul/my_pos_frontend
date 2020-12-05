@@ -68,11 +68,11 @@
                               <td class="text-right font-weight-bold">{{numberWithCommas(order.total_amount)}}</td>
                               </tr>
                               <tr v-if="order.cash_tenered">
-                              <td class="text-left">Cash Tenered</td>
+                              <td class="text-left">TENDERED AMOUNT</td>
                               <td class="text-right">{{numberWithCommas(order.cash_tenered)}}</td>
                               </tr>
                               <tr v-if="order.cash_tenered">
-                              <td class="text-left">Change Cash</td>
+                              <td class="text-left">CAHNGE AMOUNT</td>
                               <td class="text-right">{{numberWithCommas(order.cash_tenered-order.total_amount)}}</td>
                               </tr>
                           </tbody>

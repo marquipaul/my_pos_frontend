@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    
+    console.log(this.wordWrap('Local variables are created when a function starts, and deleted when the function is completed. Global JavaScript Variables', 25))
     // Create our html template, could be an html file on it's own
     const TestTable = `
     <html>
@@ -104,6 +104,46 @@ export default {
     console.log(this.textFinal);
   },
   methods: {
+    wordWrap(str, maxWidth) { //20 or 21
+      var newLineStr = "---"; 
+      var res = '';
+      var res2 = '';
+      //res2 = str.substring(0, maxWidth - 1);
+      for (var i1 = maxWidth - 1; i1 >= 0; i1--) {
+          if (this.testWhite(str.charAt(i1))) {
+              //res2 = str.slice(0, i1);
+               res2 = str.slice(0, i1);
+              // str = str.slice(i + 1);
+          }
+      }
+      while (str.length > maxWidth) {                 
+          var found = false;
+          // Inserts new line at first whitespace of the line
+          for (var i = maxWidth - 1; i >= 0; i--) {
+              if (this.testWhite(str.charAt(i))) {
+                  //res2 = str.substring(0, maxWidth - 1);
+                  res = res + [str.slice(0, i), newLineStr].join('');
+                  str = str.slice(i + 1);
+                  found = true;
+                  break;
+              }
+          }
+          // Inserts new line at maxWidth position, the word is too long to wrap
+          if (!found) {
+              res += [str.slice(0, maxWidth), newLineStr].join('');
+              str = str.slice(maxWidth);
+          }
+
+      }
+      console.log(res2)
+
+      return res + str;
+  },
+
+  testWhite(x) {
+      var white = new RegExp(/^\s$/);
+      return white.test(x.charAt(0));
+  },
     totalPerItemList(item) {
       return item.quantity*item.price
     },
@@ -175,10 +215,6 @@ export default {
           .newline()
           .newline()
           .align('center')
-          .text('Small New Line')
-          .newlineSmall()
-          .text('Small New Line')
-          .newlineSmall1()
           .text('This will serve as your Official Receipt', 30)
           .newline()
           .newline()

@@ -16,7 +16,7 @@
           <v-col
             cols="12"
             sm="6"
-            md="3"
+            md="6"
           >
             <v-card class="elevation-4">
               <v-form @submit.prevent="validate" ref="form" lazy-validation>
@@ -64,7 +64,7 @@
                   Sign In
                   </v-btn>
               </v-card-actions>
-              <v-card-actions>
+              <!-- <v-card-actions>
                 <div class="flex-grow-1"></div>
                 <v-btn
                   large
@@ -74,7 +74,7 @@
                   to="test-print">
                   Printer Test
                   </v-btn>
-              </v-card-actions>
+              </v-card-actions> -->
               </v-form>
             </v-card>
           </v-col>

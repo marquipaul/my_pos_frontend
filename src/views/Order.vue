@@ -65,6 +65,14 @@
               </template>
               <span>Show More</span>
           </v-tooltip>
+          <v-tooltip bottom v-if="currentUser.user_type == 'CASHIER'">
+              <template  v-slot:activator="{ on }">
+                <v-btn v-on="on"  :loading="printLoading == item.id" color="primary" @click="prinReceipt(item)" icon text>
+                  <v-icon>mdi-printer</v-icon>
+                </v-btn>
+              </template>
+              <span>Print Receipt</span>
+          </v-tooltip>
           <v-tooltip bottom>
               <template v-if="currentUser.user_type == 'STOREADMIN'" v-slot:activator="{ on }">
                 <v-btn v-on="on" v-if="currentUser.user_type == 'STOREADMIN'" color="error" @click="confirmAction({ action: 'delete', data: item })" icon text>
@@ -112,6 +120,7 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+            <ThermalPrinter v-bind="printerState" @done="donePrinting" />
     </div>
 </template>
 <script>
@@ -120,8 +129,9 @@ import { mapGetters } from 'vuex'
 import moment from 'moment';
 import _ from "lodash";
 import List from '../components/orders/Products'
+  import ThermalPrinter from '../components/ThermalPrinter'
 export default {
-  components: { List },
+  components: { List, ThermalPrinter },
     data () {
       return {
         delete_order_code: '',
@@ -151,7 +161,9 @@ export default {
         form: {},
         first: true,
         loading: false,
-        sendLoading: undefined
+        sendLoading: undefined,
+        printLoading: undefined,
+        printerState: { print: false, data: {} },
       }
     },
     // mounted() {
@@ -176,6 +188,23 @@ export default {
       ),
     },
     methods: {
+      prinReceipt(order) {
+        this.printLoading = order.id;
+        this.$store.dispatch('getOrderReceipt', {id: order.customer_id, code: order.order_code})
+          .then(response => {
+            
+            this.printerState = { print: true, data: response.data }
+          })
+          .catch(error => {
+            console.log(error)
+            this.printLoading = undefined;
+            this.snackbar('error', 'Something went wrong');
+          })
+      },
+      donePrinting() {
+        this.printerState = { ...this.printerState, print: false, data: {} }
+        this.printLoading = undefined;
+      },
       confirmAction({ action, data }) {
         this.confirmDialog = { show: true, action, data };
         },
