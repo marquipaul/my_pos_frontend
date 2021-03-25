@@ -10,7 +10,7 @@
                 </v-card-title>
                 <v-card-text class="justify-center">
                 <div class="text-center">
-                    <h2 class="display-3 grey--text text--darken-1">{{numberWithCommas(data.count)}}</h2>            
+                    <h2 class="display-1 grey--text text--darken-1">{{numberWithCommas(data.count)}}</h2>            
                 </div>
                 </v-card-text>
             </v-card>
@@ -60,7 +60,10 @@ export default {
             })
         },
         numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            var parseX = parseFloat(x);
+            var number = parseX.toFixed(2)
+            number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            return `${number}`
         },
     },
     computed: {

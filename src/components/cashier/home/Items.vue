@@ -47,16 +47,14 @@
             xs="12"
             cols="12"
           >
-            <v-card 
-              class="text-center"
-              @click="addItem(product, category_index, product_index)"
-              :disabled="checkValidQuantity(product)"
-            > 
+            <v-card class="text-center"> 
               <v-img
                 :class="product.image_url? '' : 'grey'"
                 height="175px"
                 :src="product.image_url"
                 :lazy-src="product.image_url"
+                @click="addItem(product, category_index, product_index)"
+                :disabled="checkValidQuantity(product)"
               >
               <v-row>
                 <v-col>
