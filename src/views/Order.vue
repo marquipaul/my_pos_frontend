@@ -67,7 +67,7 @@
           </v-tooltip>
           <v-tooltip bottom v-if="currentUser.user_type == 'CASHIER'">
               <template  v-slot:activator="{ on }">
-                <v-btn v-on="on"  :loading="printLoading == item.id" color="primary" @click="prinReceipt(item)" icon text>
+                <v-btn v-on="on"  :loading="printLoading == item.id" color="primary" @click="confirmAction({ action: 'print', data: item })" icon text>
                   <v-icon>mdi-printer</v-icon>
                 </v-btn>
               </template>
@@ -98,7 +98,10 @@
                         <span>Close</span>
                     </v-tooltip>
                     </v-card-title>
-                    <v-card-text class="d-flex flex-column align-center justify-center px-9 py-4">
+                    <v-card-text v-if="confirmDialog.action == 'print'">
+                      <p class="headline text-center py-4">Please select printer option</p>
+                    </v-card-text>
+                    <v-card-text v-else class="d-flex flex-column align-center justify-center px-9 py-4">
                         <p class="headline text-center py-4">{{ `${(confirmDialog.action == 'edit') ? 'Are you sure you want to edit' : 'Are you sure you want to delete order'}` }} {{ `${(confirmDialog.data) ? `${confirmDialog.data.order_code}?` : ''}` }}</p>
                         <p class="caption mt-n6">Please enter the Order Number for Confirmation</p>
                         <v-text-field
@@ -109,7 +112,15 @@
                           label="Order Number"
                         ></v-text-field>
                     </v-card-text>
-                    <v-card-actions class="pa-5">
+                    <v-card-actions v-if="confirmDialog.action == 'print'" class="pa-5">
+                        <v-row align="center" justify="center">
+                            <v-col cols="12" class="d-flex justify-center pb-0">
+                                <v-btn class="confirm-btn btn-min-width white--text mx-1" depressed large color="#2F80ED" @click="action({ action: 'receipt', data: confirmDialog.data });">Print Receipt</v-btn>
+                                <v-btn class="confirm-btn btn-min-width white--text mx-1" depressed large color="#2F80ED" @click="action({ action: 'order', data: confirmDialog.data });">Print Order</v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
+                    <v-card-actions v-else class="pa-5">
                         <v-row align="center" justify="center">
                             <v-col cols="12" class="d-flex justify-center pb-0">
                                 <v-btn :disabled="delete_order_code != confirmDialog.data.order_code" class="confirm-btn btn-min-width white--text" depressed large :color="((confirmDialog.action == 'edit') ? '#2F80ED' : '#EB5757')" @click="action({ action: confirmDialog.action, data: confirmDialog.data });">{{ `${(confirmDialog.action == 'edit') ? 'Confirm' : 'Delete'}` }}</v-btn>
@@ -120,7 +131,7 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <ThermalPrinter v-bind="printerState" @done="donePrinting" />
+            <ReceiptPrinter v-bind="printerState" @done="donePrinting" />
     </div>
 </template>
 <script>
@@ -129,9 +140,9 @@ import { mapGetters } from 'vuex'
 import moment from 'moment';
 import _ from "lodash";
 import List from '../components/orders/Products'
-  import ThermalPrinter from '../components/ThermalPrinter'
+  import ReceiptPrinter from '../components/ReceiptPrinter'
 export default {
-  components: { List, ThermalPrinter },
+  components: { List, ReceiptPrinter },
     data () {
       return {
         delete_order_code: '',
@@ -188,11 +199,16 @@ export default {
       ),
     },
     methods: {
-      prinReceipt(order) {
+      printReceipt(order, action) {
+        console.log(order)
         this.printLoading = order.id;
         this.$store.dispatch('getOrderReceipt', {id: order.customer_id, code: order.order_code})
           .then(response => {
-            
+            response.data.customer = order.customer_name;
+            response.data.order_type = order.order_type;
+            response.data.type = action;
+            response.data.orders = response.data.products;
+            console.log(response.data)
             this.printerState = { print: true, data: response.data }
           })
           .catch(error => {
@@ -221,6 +237,14 @@ export default {
                 case 'delete':
                     this.confirmDialog.show = false;
                     this.deleteOrder();
+                    break;
+                case 'receipt':
+                    this.confirmDialog.show = false;
+                    this.printReceipt(data, action);
+                    break;
+                case 'order':
+                    this.confirmDialog.show = false;
+                    this.printReceipt(data, action);
                     break;
             }
         },

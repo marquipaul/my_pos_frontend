@@ -249,7 +249,7 @@ export default {
     printValue(data) {
       // execute after promise
       return new Promise((resolve) => {
-        return this.printCharacteristic.writeValue(data).then(() => {
+        return this.printCharacteristic.writeValueWithResponse(data).then(() => {
             resolve();
          })
         .catch(() =>  {
