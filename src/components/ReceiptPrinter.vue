@@ -47,13 +47,19 @@ export default {
     },
     data(to) {
         if (Object.keys(to).length > 0) {
-            let { id, customer_id, cash_tenered, created_at, full_invoice_number, order_code, products, store, total_amount} = to;
-            this.formData = { ...this.formData, id, customer_id, cash_tenered, created_at, full_invoice_number, order_code, products, store, total_amount };
+          if (to.type != 'order') {
+            let { id, customer_id, type, cash_tenered, created_at, full_invoice_number, order_code, products, store, total_amount } = to;
+            this.formData = { ...this.formData, id, customer_id, type, cash_tenered, created_at, full_invoice_number, order_code, products, store, total_amount };
+          } else {
+            let { customer, type, order_type, orders } = to;
+            this.formData = { ...this.formData, type, order_type, customer, orders };
+          }
         }
     },
   },
   methods: {
     printReceipt() {
+      console.log(this.formData)
       this.loading = true
       if (this.printCharacteristic == null) {
         navigator.bluetooth.requestDevice({
@@ -71,14 +77,54 @@ export default {
         .then(characteristic => {
           // Cache the characteristic
           this.printCharacteristic = characteristic;
-          this.arrangeItems();
+          if (this.formData.type != 'order') {
+            this.arrangeReceiptItems();
+          } else {
+            this.arrangeOrderItems();
+          }
+          
         })
         .catch(this.handleError);
       } else {
-        this.arrangeItems();
+        
+        if (this.formData.type != 'order') {
+          this.arrangeReceiptItems();
+        } else {
+          this.arrangeOrderItems();
+        }
       }
     },
-    arrangeItems() {
+    arrangeOrderItems() {
+      for (let index = 0; index < this.formData.orders.length; index++) {
+            const item = this.formData.orders[index];
+            var data = [
+                { text:`${item.quantity} x ${item.description}`, align:"LEFT" },
+            ]
+            this.items.push(data);
+        }
+        console.log(this.items)
+        this.sendOrderData()
+    },
+    sendOrderData() {
+      let encoder = new EscPosEncoder();
+      //Supports 58mm only
+      let result = encoder
+            .newline()
+            .line('================================')
+            .align('left')
+            .line(`CUSTOMER: ${this.formData.customer}`, 35)
+            .line('--------------------------------')
+            .line(`ORDERS for ${this.formData.order_type}`)
+            .line('--------------------------------')
+            .tableLoop(this.items)
+            .line('--------------------------------')
+            .newline()
+            .newline()
+            .encode();
+
+      this.loopEncoder(result)
+    },
+    arrangeReceiptItems() {
         for (let index = 0; index < this.formData.products.length; index++) {
             const item = this.formData.products[index];
             var data = [
@@ -88,9 +134,9 @@ export default {
             this.items.push(data);
         }
         console.log(this.items)
-        this.sendTextData()
+        this.sendReceiptData()
     },
-    sendTextData() {
+    sendReceiptData() {
       let encoder = new EscPosEncoder();
       //Supports 58mm only
       let result = encoder

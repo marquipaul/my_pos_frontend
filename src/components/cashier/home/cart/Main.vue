@@ -22,6 +22,8 @@
               <v-list-item-title>Registered Customer</v-list-item-title>
                 <v-list-item-subtitle>
                     <v-autocomplete
+                      name="customer"
+                      ref="customer"
                       v-model="customer_id"
                       :items="customers"
                       placeholder="Select a Customer"
@@ -43,7 +45,28 @@
           subheader
         >
           <v-subheader>Order Details</v-subheader>
-          <v-list-item>
+          <v-list-item v-if="currentUser.store.mode === 'RESTAURANT'">
+            <v-list-item-content>
+              <v-list-item-title>DINE-IN/TAKE-OUT</v-list-item-title>
+                <v-list-item-subtitle>
+                    <v-radio-group
+                        v-model="form.order_type"
+                        row
+                        dense
+                        >
+                        <v-radio
+                            label="DINE-IN"
+                            value="DINE-IN"
+                        ></v-radio>
+                        <v-radio
+                            label="TAKE-OUT"
+                            value="TAKE-OUT"
+                        ></v-radio>
+                        </v-radio-group>
+                </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="currentUser.store.mode == 'RESTAURANT'? form.order_type == 'TAKE-OUT' : true">
             <v-list-item-content>
               <v-list-item-title>Transaction Type</v-list-item-title>
                 <v-list-item-subtitle>
@@ -211,13 +234,18 @@
                 ></v-text-field>
             </v-list-item>
             <p v-if="changeStatus" class="px-2 text-center caption red--text">Paid Amount must be equal or higher than the total amount</p>
+            <v-list-item v-if="currentUser.store.mode == 'RESTAURANT'">
+                <v-btn :disabled="cartItems.length == 0" class="warning" :loading="loadingCart" block @click="printOrders()">
+                    Print Orders
+                </v-btn>
+            </v-list-item>
             <v-list-item>
-                <v-btn :disabled="verifyCart()" :loading="loadingCart" block @click="checkOut()">
+                <v-btn :disabled="verifyCart()" class="primary" block @click="checkOut()">
                     Check Out ₱{{totalAmount}}
                 </v-btn>
             </v-list-item>
             <v-list-item v-if="getDeviceType() != 'desktop'">
-                <ThermalPrinter v-bind="printerState" @done="printerState = { ...printerState, print: false, data: {} }" />
+                <ReceiptPrinter v-bind="printerState" @done="printDone()" />
             </v-list-item>
         </v-list>
     </v-form>
@@ -225,12 +253,13 @@
 </template>
 <script>
 /* eslint-disable */
+  import { mapGetters } from 'vuex'
   import CreateCustomer from '../../../CreateCustomer'
-  import ThermalPrinter from '../../../ThermalPrinter'
+  import ReceiptPrinter from '../../../ReceiptPrinter'
   export default {
     components: {
       CreateCustomer,
-      ThermalPrinter
+      ReceiptPrinter
     },
     data () {
       return {
@@ -240,6 +269,7 @@
             transaction_type: 'PICKUP',
             order_status: 'RECEIVED',
             payment_status: 'PAID',
+            order_type: 'DINE-IN',
             cash_tenered: 0
         },
         customer_id: undefined,
@@ -253,6 +283,21 @@
       this.getDataFromAPI();
     },
     methods: {
+      printOrders() {
+          this.loadingCart = true;
+          let index = this.customers.findIndex(item => item.id === this.customer_id);
+          var data = {
+            customer: this.customer_id? this.customers[index].name : 'N/A',
+            orders: this.cartItems,
+            order_type: this.form.order_type,
+            type: 'order'
+          }
+          this.printerState = { print: true, data: data }
+      },
+      printDone() {
+        this.printerState = { ...this.printerState, print: false, data: {} }
+        this.loadingCart = false;
+      },
       getDeviceType() {
           const ua = navigator.userAgent;
           if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
@@ -332,12 +377,14 @@
               order_status: this.form.order_status,
               cash_tenered: this.form.cash_tenered,
               payment_status: this.form.payment_status,
+              order_type: this.form.order_type,
               products: this.cartItems
             }
             this.$store.dispatch('placeOrder', form)
               .then(response => {
                 console.log(response)
                 if (response.status === 200) {
+                  response.data.type = 'receipt'
                   this.printerState = { print: true, data: response.data }
                 }
                 this.$store.commit('SET_LOADING', false);
@@ -390,6 +437,9 @@
       }
     },
     computed: {
+      ...mapGetters({
+        currentUser: 'currentUser'
+      }),
       change_amount() {
         var amount = this.form.cash_tenered - this.totalAmount;
         if (amount < 0) {

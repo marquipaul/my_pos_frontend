@@ -27,7 +27,6 @@
             filled
             rounded 
             dense
-            clearable
             placeholder="Search item" 
             prepend-inner-icon="mdi-magnify">
           </v-text-field>

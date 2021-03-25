@@ -21,7 +21,7 @@
             <v-card class="elevation-4">
               <v-form @submit.prevent="validate" ref="form" lazy-validation>
                 <v-card-title class="justify-center">
-                    <v-img max-width="250" src="~@/assets/img/finance.svg" lazy-src="~@/assets/img/finance.svg"/>
+                    <v-img max-width="250" src="~@/assets/img/logo.png" lazy-src="~@/assets/img/logo.png"/>
                   </v-card-title>
                <v-card-subtitle id="text" class="pa-0 pb-5 pt-5 text-center">Sign In to your account</v-card-subtitle>
               <v-card-text>
