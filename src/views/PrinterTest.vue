@@ -221,6 +221,13 @@ export default {
           .text('This Official Receipt shall be valid for Five(5) years from the date of permit to use.', 35)
           .newline()
           .newline()
+          .barcode('CODE128 test', 'code128', 60)
+          .newline()
+          .barcode('{B' + 'CODE128 test', 'code128', 60)
+          .newline()
+          .barcode('{C' + '2Uc#', 'code128', 60)
+          .newline()
+          .newline()
           .encode();
 
       this.loopEncoder(result)
