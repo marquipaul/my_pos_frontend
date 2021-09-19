@@ -234,7 +234,7 @@
                 ></v-text-field>
             </v-list-item>
             <p v-if="changeStatus" class="px-2 text-center caption red--text">Paid Amount must be equal or higher than the total amount</p>
-            <v-list-item v-if="currentUser.store.mode == 'RESTAURANT'">
+            <v-list-item v-if="currentUser.store.mode == 'RESTAURANT' && currentUser.store.enable_receipt">
                 <v-btn :disabled="cartItems.length == 0" class="warning" :loading="loadingCart" block @click="printOrders()">
                     Print Orders
                 </v-btn>
@@ -384,8 +384,10 @@
               .then(response => {
                 console.log(response)
                 if (response.status === 200) {
-                  response.data.type = 'receipt'
-                  this.printerState = { print: true, data: response.data }
+                  if (this.currentUser.store.enable_receipt) {
+                    response.data.type = 'receipt'
+                    this.printerState = { print: true, data: response.data }
+                  }
                 }
                 this.$store.commit('SET_LOADING', false);
                 this.clearOrder();

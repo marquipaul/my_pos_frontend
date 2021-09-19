@@ -46,8 +46,9 @@
             xs="12"
             cols="12"
           >
-            <v-card class="text-center"> 
+            <v-card class="text-center" style="cursor: pointer;"> 
               <v-img
+                style="cursor: pointer;"
                 :class="product.image_url? '' : 'grey'"
                 height="175px"
                 :src="product.image_url"

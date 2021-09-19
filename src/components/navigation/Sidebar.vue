@@ -32,7 +32,7 @@
 
     <v-list class="mt-n5" dense nav>
     <!-- dashboard menu -->
-    <template v-for="(item, i) in navigations" >
+    <template v-for="(item, i) in currentUser.user_type === 'SUPERADMIN' ? adminNavigations : navigations" >
       <!-- <v-divider :key="item.name"></v-divider> -->
       <v-list-item :to="item.route" router :key="i">
         <v-list-item-action>
@@ -65,6 +65,11 @@ export default {
                 {name: 'Orders', icon: 'mdi-view-list', route: 'orders'},
                 {name: 'Income', icon: 'mdi-trending-up', route: 'income-report'},
                 {name: 'Billing', icon: 'mdi-clipboard-text', route: 'billing'},
+            ],
+            adminNavigations: [
+                {name: 'Dashboard', icon: 'mdi-view-dashboard', route: 'dashboard'},
+                {name: 'Store', icon: 'mdi-store', route: 'stores'},
+                {name: 'Accounts', icon: 'mdi-account-multiple', route: 'accounts-admin'},
             ],
         }
     },

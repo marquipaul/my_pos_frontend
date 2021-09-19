@@ -112,6 +112,7 @@ export default {
         userFormDialog: { show: false, action: '', data: {} },
         confirmDialog : { show: false, action: '', data: {} },
         headers: [
+          { text: 'ID', value: 'id' },
           { text: 'Category Name', value: 'title' },
           //{ text: 'Description', value: 'description' },
           { text: 'Total Cost Price', value: 'total_cost_price', sortable: false },

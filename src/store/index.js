@@ -19,6 +19,8 @@ import analytic from './modules/analytic';
 import message from './modules/message';
 import billing from './modules/billing';
 
+import store from './modules/store'
+
 export default new Vuex.Store({
   state: {
     isLoading: false,
@@ -77,6 +79,7 @@ export default new Vuex.Store({
     dashboard,
     analytic,
     message,
-    billing
+    billing,
+    store
   }
 })

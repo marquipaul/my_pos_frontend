@@ -6,7 +6,7 @@
           <v-col
             cols="12"
             sm="8"
-            md="3"
+            md="4"
           >
           <v-sheet v-if="loading" :color="`grey lighten-4`">
             <v-skeleton-loader

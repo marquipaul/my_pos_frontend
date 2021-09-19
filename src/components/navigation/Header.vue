@@ -7,13 +7,15 @@
       app
     >
     <v-app-bar-nav-icon 
-        v-if="currentUser.user_type === 'STOREADMIN'"
+        v-if="currentUser.user_type !== 'CASHIER'"
         text
         @click.stop="drawerOpen"
       >
       <v-icon>mdi-menu</v-icon>
       </v-app-bar-nav-icon>
-       <v-toolbar-title class="text-uppercase">{{ currentUser.store.name }}</v-toolbar-title>
+       <v-toolbar-title class="text-uppercase">
+         {{ currentUser.user_type === 'SUPERADMIN' ? 'SUPER ADMIN' : currentUser.store.name }}
+         </v-toolbar-title>
 
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="currentUser.user_type === 'CASHIER'">

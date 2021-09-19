@@ -65,9 +65,9 @@
               </template>
               <span>Show More</span>
           </v-tooltip>
-          <v-tooltip bottom v-if="currentUser.user_type == 'CASHIER'">
+          <v-tooltip bottom v-if="currentUser.user_type == 'CASHIER' && currentUser.store.enable_receipt">
               <template  v-slot:activator="{ on }">
-                <v-btn v-on="on"  :loading="printLoading == item.id" color="primary" @click="confirmAction({ action: 'print', data: item })" icon text>
+                <v-btn v-on="on" :loading="printLoading == item.id" color="primary" @click="confirmAction({ action: 'print', data: item })" icon text>
                   <v-icon>mdi-printer</v-icon>
                 </v-btn>
               </template>

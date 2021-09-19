@@ -14,6 +14,8 @@ import Receipt from '../views/Receipt.vue'
 import Category from '../views/Categories.vue'
 import Billing from '../views/Billing.vue'
 
+import Store from '../views/Stores.vue'
+
 import PrinterTest from '../views/PrinterTest.vue'
 
 
@@ -54,6 +56,26 @@ const routes = [
       requiresAuth: true,
       permission: 'STOREADMIN',
       title: 'Accounts | StockPoints',
+    }
+  },
+  {
+    path: '/accounts-admin',
+    name: 'Accounts-Admin',
+    component: Account,
+    meta: {
+      requiresAuth: true,
+      permission: 'SUPERADMIN',
+      title: 'Accounts | StockPoints',
+    }
+  },
+  {
+    path: '/stores',
+    name: 'stores',
+    component: Store,
+    meta: {
+      requiresAuth: true,
+      permission: 'SUPERADMIN',
+      title: 'Stores | StockPoints',
     }
   },
   {
@@ -151,7 +173,7 @@ const routes = [
     meta: {
       title: 'TEST PRINT | StockPoints',
     }
-  }
+  },
 ]
 
 const router = new VueRouter({

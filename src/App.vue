@@ -5,7 +5,7 @@
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
     <Snackbar />
-    <Sidebar v-if="loggedIn&currentUser.user_type === 'STOREADMIN'" />
+    <Sidebar v-if="loggedIn&currentUser.user_type !== 'CASHIER'" />
     <v-main>
       <v-container>
         <router-view></router-view>

@@ -46,6 +46,14 @@ export function initialize(store, router, axios) {
                 next('/dashboard');
               }
             break;
+
+            case 'SUPERADMIN':
+              if( store.getters.currentUser.user_type == 'SUPERADMIN' ){
+                next();
+              }else{
+                next('/admin/dashboard');
+              }
+            break;
         }
     })
 

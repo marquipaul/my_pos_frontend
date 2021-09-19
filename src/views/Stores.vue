@@ -1,11 +1,11 @@
 <template>
     <div>
-      <p class="grey--text text--darken-1">Accounts</p>  
+      <p class="grey--text text--darken-1">Stores</p>  
         <v-card>
             <v-card-title>
                 <v-btn class="primary" @click="action({ action: 'add' })">
                     <v-icon>mdi-plus</v-icon>
-                    Create Account
+                    Create Store
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -20,8 +20,8 @@
                 <v-data-table
                     :loading="loading"
                     :headers="headers"
-                    :items="getAccounts.data"
-                    :server-items-length="getAccounts.total"
+                    :items="getStores.data"
+                    :server-items-length="getStores.total"
                     :options.sync="pagination"
                     :footer-props="{ 'items-per-page-options': [5, 10, 15, 25, 50, 100]}"
                     class="elevation-1"
@@ -29,10 +29,21 @@
                 <template v-slot:item.created_at="{ item }">
                     {{moment(item.created_at).format('llll')}}
                 </template>
-                <template v-slot:item.user_type="{ item }">
-                <v-chip small>
-                    {{item.user_type}}
-                </v-chip>
+                <template v-slot:item.enable_sms="{ item }">
+                    <v-switch
+                        :loading="item.id === form.id"
+                        @change="smsStatus(item)"
+                        inset
+                        :input-value="item.enable_sms ? true : false"
+                    ></v-switch>
+                </template>
+                <template v-slot:item.enable_receipt="{ item }">
+                    <v-switch
+                        :loading="item.id === form.id"
+                        @change="receiptStatus(item)"
+                        inset
+                        :input-value="item.enable_receipt ? true : false"
+                    ></v-switch>
                 </template>
                 <template v-slot:item.action="{ item }">
                     <v-tooltip bottom>
@@ -51,8 +62,7 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-        <FormModal v-if="currentUser.user_type === 'STOREADMIN'" v-bind="userFormDialog" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
-        <AdminFormModal v-else-if="currentUser.user_type === 'SUPERADMIN'" v-bind="userFormDialog" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
+        <FormModal v-bind="userFormDialog" @close="userFormDialog = { ...userFormDialog, show: false, data: {} }"/>
         <v-dialog v-model="confirmDialog.show" scrollable max-width="540" color="primary" transition="scroll-y-reverse-transition" persistent>
                 <v-card>
                     <v-card-title>
@@ -85,25 +95,25 @@
 import { mapGetters } from 'vuex'
 import _ from "lodash";
 import moment from 'moment';
-import FormModal from '../components/store-admin/account/FormModal'
-import AdminFormModal from '../components/super-admin/account/FormModal'
+import FormModal from '../components/super-admin/store/FormModal'
 export default {
-  components: { FormModal, AdminFormModal },
+  components: { FormModal },
     data () {
       return {
         moment: moment,
         loading: false,
         search: '',
         dialog: false,
+        form: {},
         pagination: {},
         userFormDialog: { show: false, action: '', data: {} },
         confirmDialog : { show: false, action: '', data: {} },
         headers: [
           { text: 'ID', value: 'id' },
           { text: 'Name', value: 'name' },
-          { text: 'User Type', value: 'user_type' },
-          { text: 'Email', value: 'email' },
-          { text: 'Mobile Number', value: 'mobile_number' },
+          { text: 'Owner Name', value: 'owner_name' },
+          { text: 'Enable SMS', value: 'enable_sms' },
+          { text: 'Enable Receipt', value: 'enable_receipt' },
           { text: 'Created At', value: 'created_at' },
           { text: 'Action', value: 'action' },
         ],
@@ -132,6 +142,31 @@ export default {
       ),
     },
     methods: {
+      smsStatus(item) {
+        item.enable_sms = item.enable_sms ? 0 : 1;
+        console.log(item)
+        this.storeStatus(item)
+      },
+      receiptStatus(item) {
+        item.enable_receipt = item.enable_receipt ? 0 : 1;
+        console.log("ITEM", item)
+        this.storeStatus(item)
+      },
+      storeStatus (item) {
+        this.form = {
+          id: item.id,
+          enable_sms: item.enable_sms,
+          enable_receipt: item.enable_receipt,
+        }
+        this.$store.dispatch('updateStoreStatus', this.form)
+          .then(res => {
+            console.log(res)
+            setTimeout(() => {
+              this.form = {}
+            }, 1000);
+            
+          })
+      },
       getDataFromApi() {
         this.loading = true
           if (this.first) {
@@ -146,8 +181,9 @@ export default {
             per_page: this.pagination.itemsPerPage,
             sort_by: this.pagination.sortBy[0],
             sort_order: this.pagination.sortDesc[0]? 'DESC' : 'ASC',
+            whole: true
           }
-        this.$store.dispatch('getAccounts', params)
+        this.$store.dispatch('getStores', params)
           .then(res => {
               this.loading = false
             console.log(res)
@@ -180,11 +216,11 @@ export default {
         deleteUser() {
             console.log(this.confirmDialog)
             this.loading = true
-            this.$store.dispatch('deleteAccount', this.confirmDialog.data.id)
+            this.$store.dispatch('deleteStore', this.confirmDialog.data.id)
                 .then(res => {
                     this.loading = false
                     console.log(res)
-                    this.snackbar('success', 'Account Successfully Deleted');
+                    this.snackbar('success', 'Store Successfully Deleted');
                 })
                 .catch(error => {
                     this.loading = false
@@ -203,7 +239,7 @@ export default {
     },
     computed: {
     ...mapGetters({
-      getAccounts: 'getAccounts',
+      getStores: 'getWholeStores',
       currentUser: 'currentUser',
     })
   },

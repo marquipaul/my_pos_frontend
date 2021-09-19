@@ -19,6 +19,7 @@ Vue.prototype.$validate = {
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
   rules: {
       required: value => !!value || 'Required.',
+      requiredRadio: value => value !== '' || 'Required.',
       email: value => { return Vue.prototype.$validate.emailRegex.test(value) || 'Email is invalid.'; },
       password: value => { return Vue.prototype.$validate.passwordRegex.test(value) || 'Password is invalid.'; },
       mobileNumber: value => { return Vue.prototype.$validate.phoneNumberRegex.test(value) || 'Mobile number is invalid.'; }

@@ -23,7 +23,7 @@
                 <v-textarea
                     :rules="[$validate.rules.required]"
                     v-model="formData.description"
-                    label="Address"
+                    label="Description"
                     rows="3"
                     placeholder="Enter Description"
                 ></v-textarea>
