@@ -99,6 +99,7 @@
                     small
                     color="primary"
                     text
+                    @click="addItem(product, category_index, product_index)"
                 >
                     Add to Cart {{numberWithCommas(getPrice(product))}}
                 </v-btn>

@@ -34,14 +34,12 @@ Vue.prototype.$validate = {
 Vue.mixin({
   methods: {
     numberWithCommas(x) {
-      //Monday, Dec 28 2015 at 4:13pm
       var parseX = parseFloat(x);
       var number = parseX.toFixed(2)
       number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       return `₱${number}`
     },
     numberWithCommasR(x) {
-      //Monday, Dec 28 2015 at 4:13pm
       var parseX = parseFloat(x);
       var number = parseX.toFixed(2)
       number = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
